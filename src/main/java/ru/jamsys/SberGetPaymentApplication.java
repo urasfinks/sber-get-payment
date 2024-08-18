@@ -1,13 +1,14 @@
-package ru.jamsys.sber_get_payment;
+package ru.jamsys;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import ru.jamsys.core.App;
 
 @SpringBootApplication
 public class SberGetPaymentApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SberGetPaymentApplication.class, args);
+		App.springSource = SberGetPaymentApplication.class;
+		App.main(args);
 	}
 
 }

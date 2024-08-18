@@ -1,0 +1,172 @@
+body {
+    padding: 0px;
+    margin: 0px;
+    font-family: Arial;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(254.93deg, rgb(175, 178, 36) 9.3%, rgb(21, 180, 129) 48.25%, rgb(0, 182, 222) 90.35%);
+}
+
+* {
+    font-size: 15px;
+}
+
+.tb{
+    border-collapse: separate;
+    border-spacing: 30px;
+}
+
+.td-round .button,
+.td-round .extraButton{
+    margin: 4px 0px;
+}
+.td-round {
+    padding: 20px;
+    border-radius: 16px;
+    /*border: 2px dashed #555;*/
+    /*background: rgba(255,255,255, 0.9);*/
+    background: #f8f8f8;
+    box-shadow: rgba(45, 73, 88, 0.15) 0px 12px 24px;
+}
+
+.drop-container {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    color: #444;
+    transition: background .2s ease-in-out, border .2s ease-in-out;
+    padding: 15px 0px;
+}
+
+.drop-container-2 button {
+    display: inline-block;
+    margin: 5px;
+}
+
+.drop-container-2 {
+    width: 550px;
+    position: relative;
+    gap: 10px;
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px dashed #555;
+    color: #444;
+    transition: background .2s ease-in-out, border .2s ease-in-out;
+}
+
+.drop-container:hover,
+.drop-container.drag-active {
+    background: #fff;
+}
+
+.drop-container:hover .drop-title,
+.drop-container.drag-active .drop-title {
+    color: #222;
+}
+
+.drop-title {
+    color: #444;
+    font-weight: bold;
+    text-align: center;
+    transition: color .2s ease-in-out;
+}
+
+input[type=file] {
+    width: 350px;
+    max-width: 100%;
+    color: #444;
+    padding: 5px;
+    background: #fff;
+    border-radius: 10px;
+    border: 1px solid #555;
+}
+
+input[type=file]::file-selector-button {
+    margin-right: 20px;
+    border: none;
+    background: #148f2b;
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #fff;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+    background: #148f2b;
+}
+
+.tx {
+    width: 100%;
+}
+
+.tx td {
+    padding: 5px;
+}
+
+.extraInput {
+    width: 100%;
+    border: 2px dashed #555;
+    padding: 5px 15px;
+    border-radius: 10px;
+}
+
+.extraButton {
+    border-width: 0px;
+    padding: 10px 15px;
+    border-radius: 10px;
+    background-color: #148f2b;
+    color: #fff;
+    cursor: pointer;
+    transition: background .1s ease-in-out;
+}
+
+.orange-bg{
+    background: rgb(227, 98, 27) !important;
+}
+
+.orange-bg:hover{
+    background: rgb(255, 107, 28) !important;
+}
+
+.extraButton:hover {
+    background-color: #16a431;
+}
+
+.center {
+    margin: auto;
+}
+
+#error {
+    color: red;
+    transition: background .2s ease-in-out, border .2s ease-in-out;
+}
+
+.label {
+    font-weight: bold;
+    background: #fff;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 12px 0px;
+    box-shadow: rgba(45, 73, 88, 0.02) 0px 12px 24px;
+    color: #000;
+}
+
+.group-value {
+    padding: 5px 3px;
+}
+
+
+.logo{
+    background-image: url(/images/logo.png);
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    background-size: 30%;
+}
