@@ -69,6 +69,15 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<builder>docker.io/paketobuildpacks/builder-jammy-full:latest</builder>
+					</image>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 

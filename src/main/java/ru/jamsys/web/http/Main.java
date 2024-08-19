@@ -19,6 +19,8 @@ import ru.jamsys.core.promise.Promise;
 import ru.jamsys.core.promise.PromiseGenerator;
 import ru.jamsys.core.web.http.HttpHandler;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,7 +59,6 @@ public class Main implements PromiseGenerator, HttpHandler {
                     String location = App.get(ServiceProperty.class).get("run.args.web.resource.location");
                     try {
                         Map<String, Object> parameters = new HashMap<>();
-                        parameters.put("FIRST_NAME", "Hello");
 
                         JasperDesign jasperDesign = JRXmlLoader.load(new File(location + "payment.jrxml"));
                         JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
@@ -70,9 +71,14 @@ public class Main implements PromiseGenerator, HttpHandler {
 
 
                         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, beanColDataSource);
-                        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
-                        response.setContentType("application/pdf");
-                        response.addHeader("Content-Disposition", "inline; filename=jasper.pdf;");
+
+                        //JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+
+                        BufferedImage image = (BufferedImage) JasperPrintManager.printPageToImage(jasperPrint, 0, 5f);
+                        ImageIO.write(image, "jpg", response.getOutputStream());
+
+                        response.setContentType("image/jpeg");
+                        //response.addHeader("Content-Disposition", "inline; filename=jasper.pdf;");
                     } catch (Throwable th) {
                         th.printStackTrace();
                     }
