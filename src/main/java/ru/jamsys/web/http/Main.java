@@ -3,18 +3,27 @@ package ru.jamsys.web.http;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
+import ru.jamsys.DataContainer;
 import ru.jamsys.core.App;
 import ru.jamsys.core.component.ServicePromise;
 import ru.jamsys.core.component.ServiceProperty;
+import ru.jamsys.core.extension.builder.HashMapBuilder;
 import ru.jamsys.core.extension.http.HttpAsyncResponse;
 import ru.jamsys.core.promise.Promise;
 import ru.jamsys.core.promise.PromiseGenerator;
 import ru.jamsys.core.web.http.HttpHandler;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Component
 @SuppressWarnings("unused")
@@ -40,14 +49,35 @@ public class Main implements PromiseGenerator, HttpHandler {
                 })
                 .onComplete((atomicBoolean, promise) -> {
                     HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
-
                     HttpServletResponse response = input.getResponse();
-                    response.setHeader("Content-Type", "application/pdf");
-                    response.setHeader("Content-Disposition", "inline; filename=\"payment.pdf\"");
-
+//                    HttpServletResponse response = input.getResponse();
+//                    response.setHeader("Content-Type", "application/pdf");
+//                    response.setHeader("Content-Disposition", "inline; filename=\"payment.pdf\"");
+//
                     String location = App.get(ServiceProperty.class).get("run.args.web.resource.location");
-                    InputStream in = new FileInputStream(location + "test.pdf");
-                    input.complete(in);
+                    try {
+                        Map<String, Object> parameters = new HashMap<>();
+                        parameters.put("FIRST_NAME", "Hello");
+
+                        JasperDesign jasperDesign = JRXmlLoader.load(new File(location + "payment.jrxml"));
+                        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+
+                        List<DataContainer> dataList = new ArrayList<>();
+                        DataContainer sampleBean = new DataContainer();
+                        sampleBean.setDetailsMap(new HashMapBuilder<String, Object>().append("PRIVATEPAY_CONV_FIO", "ura"));
+                        dataList.add(sampleBean);
+                        JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
+
+
+                        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, beanColDataSource);
+                        JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
+                        response.setContentType("application/pdf");
+                        response.addHeader("Content-Disposition", "inline; filename=jasper.pdf;");
+                    } catch (Throwable th) {
+                        th.printStackTrace();
+                    }
+
+                    input.getCompletableFuture().complete(null);
                 });
     }
 

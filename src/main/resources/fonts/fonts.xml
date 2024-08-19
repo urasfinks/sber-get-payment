@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fontFamilies>
+    <fontFamily name="PTSans">
+        <normal>
+            <ttf><![CDATA[fonts/PTSans/PTS55F.ttf]]></ttf>
+            <pdf><![CDATA[fonts/PTSans/PTS55F.ttf]]></pdf>
+        </normal>
+        <pdfEncoding><![CDATA[Identity-H]]></pdfEncoding>
+        <pdfEmbedded><![CDATA[true]]></pdfEmbedded>
+        <exportFonts/>
+    </fontFamily>
+</fontFamilies>
