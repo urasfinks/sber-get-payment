@@ -10,7 +10,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.jamsys.DataContainer;
-import ru.jamsys.SberGetPaymentApplication;
+import ru.jamsys.PrepareDataTemplate;
 import ru.jamsys.core.App;
 import ru.jamsys.core.component.ServicePromise;
 import ru.jamsys.core.component.ServiceProperty;
@@ -66,7 +66,7 @@ public class Main implements PromiseGenerator, HttpHandler {
 
                         List<DataContainer> dataList = new ArrayList<>();
                         DataContainer sampleBean = new DataContainer();
-                        sampleBean.setDetailsMap(SberGetPaymentApplication.parseJson(new String(UtilFile.readBytes("security/data.json"))));
+                        sampleBean.setDetailsMap(PrepareDataTemplate.parse(new String(UtilFile.readBytes("security/data.json"))));
                         dataList.add(sampleBean);
                         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
 

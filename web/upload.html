@@ -15,6 +15,28 @@
             <div id="error"></div>
         </td>
     </tr>
+    <tr>
+        <td>
+            <form method="POST" enctype="multipart/form-data" id="form-upload" action="/QrReader" target="_blank" style="cursor: pointer;">
+                <table class="tx">
+                    <tr>
+                        <td colspan="2">
+                            <label for="upload" class="drop-container" id="dropcontainer">
+                                <span class="drop-title">Перетащите фото с QR</span>
+                                или
+                                <input type="file" id="upload" name="file" required>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="right">
+                            <input type="submit" value="Загрузить" class="extraButton orange-bg">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </td>
+    </tr>
 </table>
 
 
