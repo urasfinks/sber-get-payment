@@ -17,8 +17,12 @@ public class SberGetPaymentApplication {
         App.springSource = SberGetPaymentApplication.class;
         App.main(args);
 
-//        byte[] bytes = UtilFile.readBytes("security/data.json");
-//        System.out.println(UtilJson.toStringPretty(parseJson(new String(bytes)), "{}"));
+//        try {
+//            byte[] bytes = UtilFile.readBytes("security/data.json");
+//            System.out.println(UtilJson.toStringPretty(parseJson(new String(bytes)), "{}"));
+//        } catch (Throwable th) {
+//            App.error(th);
+//        }
     }
 
     public static Map<String, Object> parseJson(String json) {
@@ -63,10 +67,28 @@ public class SberGetPaymentApplication {
                 .fractionalName5to20("КОПЕЕК")
                 .build();
 
+        try {
+            result.put("C_PAY_CONFIRM_OPERDATE", Util.timestampToDateFormat(
+                    Util.getTimestamp(result.get("C_PAY_CONFIRM_OPERDATE") + "", "yyyy-MM-dd"),
+                    "dd.MM.yyyy"
+            ));
+        } catch (Throwable th) {
+            App.error(th);
+        }
+
+        try {
+            result.put("C_PAY_CONFIRM_PAYDATE", Util.timestampToDateFormat(
+                    Util.getTimestamp(result.get("C_PAY_CONFIRM_PAYDATE") + "", "yyyy-MM-dd'T'HH:mm:ssXXX"),
+                    "dd.MM.yyyy HH:mm"
+            ));
+        } catch (Throwable th) {
+            App.error(th);
+        }
+
         result.put("amountString", FwMoneyUtils.num2str(new BigDecimal(result.get("C_PAY_CONFIRM_SUM") + ""), CURRENCY_RUB));
         result.put("C_PAY_CONFIRM_SUM", String.format("%.2f", Float.parseFloat(result.get("C_PAY_CONFIRM_SUM") + "")));
         result.put("PAYORDER_CONV_RECKPP", "0");
-        result.put("C_PAY_CONFIRM_DATE", Util.getDate("dd.MM.yyyy H:m"));
+        result.put("C_PAY_CONFIRM_DATE", Util.getDate("dd.MM.yyyy HH:mm"));
         result.put("C_PAY_CONFIRM_PAYMETH_TYPE", mapOper.get(result.get("PayMethodCode")));
         result.put("A_PAYMETH_TXT", mapType.get(result.get("PayMethodCode")));
 
