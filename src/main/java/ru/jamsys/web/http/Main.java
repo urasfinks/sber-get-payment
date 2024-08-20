@@ -10,11 +10,12 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.jamsys.DataContainer;
+import ru.jamsys.SberGetPaymentApplication;
 import ru.jamsys.core.App;
 import ru.jamsys.core.component.ServicePromise;
 import ru.jamsys.core.component.ServiceProperty;
-import ru.jamsys.core.extension.builder.HashMapBuilder;
 import ru.jamsys.core.extension.http.HttpAsyncResponse;
+import ru.jamsys.core.flat.util.UtilFile;
 import ru.jamsys.core.promise.Promise;
 import ru.jamsys.core.promise.PromiseGenerator;
 import ru.jamsys.core.web.http.HttpHandler;
@@ -65,7 +66,7 @@ public class Main implements PromiseGenerator, HttpHandler {
 
                         List<DataContainer> dataList = new ArrayList<>();
                         DataContainer sampleBean = new DataContainer();
-                        sampleBean.setDetailsMap(new HashMapBuilder<String, Object>().append("PRIVATEPAY_CONV_FIO", "ura"));
+                        sampleBean.setDetailsMap(SberGetPaymentApplication.parseJson(new String(UtilFile.readBytes("security/data.json"))));
                         dataList.add(sampleBean);
                         JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
 
