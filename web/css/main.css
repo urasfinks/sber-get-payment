@@ -11,133 +11,59 @@ body {
 }
 
 * {
-    font-size: 15px;
+    font-size: 1.1rem;
 }
 
 .tb{
     border-collapse: separate;
-    border-spacing: 30px;
+    border-spacing: 0px;
+
+    min-width: 500px;
+    max-width: 1100px;
 }
 
-.td-round .button,
-.td-round .extraButton{
-    margin: 4px 0px;
+.td-round-2 {
+    border-radius: 1rem;
+    background: #fff;
+    box-shadow: rgba(45, 73, 88, 0.07) 0px 12px 24px;
+    padding: 0px;
+    overflow: hidden;
 }
 .td-round {
-    padding: 20px;
-    border-radius: 16px;
+    border-radius: 1rem;
     /*border: 2px dashed #555;*/
     /*background: rgba(255,255,255, 0.9);*/
-    background: #f8f8f8;
+    background: #fff;
     box-shadow: rgba(45, 73, 88, 0.15) 0px 12px 24px;
+    padding: 0px;
+    overflow: hidden;
 }
 
+.drop-container input{
+    visibility: hidden;
+    height: 0px;
+    width: 0px;
+    box-sizing: border-box;
+    font-size: 1px;
+
+}
+.drop-container:hover {
+    background: linear-gradient(254.93deg, rgb(188, 191, 36) 9.3%, rgb(21, 180, 129) 48.25%, rgb(0, 187, 227) 90.35%);
+    box-shadow: rgba(45, 73, 88, 0.05) 0px 12px 24px;
+}
 .drop-container {
     position: relative;
     display: flex;
-    gap: 10px;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    border-radius: 10px;
+    border-radius: 1rem;
     color: #444;
     transition: background .2s ease-in-out, border .2s ease-in-out;
-    padding: 15px 0px;
-}
-
-.drop-container-2 button {
-    display: inline-block;
-    margin: 5px;
-}
-
-.drop-container-2 {
-    width: 550px;
-    position: relative;
-    gap: 10px;
-    padding: 20px;
-    border-radius: 10px;
-    border: 2px dashed #555;
-    color: #444;
-    transition: background .2s ease-in-out, border .2s ease-in-out;
-}
-
-.drop-container:hover,
-.drop-container.drag-active {
-    background: #fff;
-}
-
-.drop-container:hover .drop-title,
-.drop-container.drag-active .drop-title {
-    color: #222;
-}
-
-.drop-title {
-    color: #444;
-    font-weight: bold;
-    text-align: center;
-    transition: color .2s ease-in-out;
-}
-
-input[type=file] {
-    width: 350px;
-    max-width: 100%;
-    color: #444;
-    padding: 5px;
-    background: #fff;
-    border-radius: 10px;
-    border: 1px solid #555;
-}
-
-input[type=file]::file-selector-button {
-    margin-right: 20px;
-    border: none;
-    background: #148f2b;
-    padding: 10px 20px;
-    border-radius: 10px;
+    height: 3rem;
+    line-height: 3rem;
     color: #fff;
-    cursor: pointer;
-    transition: background .2s ease-in-out;
-}
-
-input[type=file]::file-selector-button:hover {
-    background: #148f2b;
-}
-
-.tx {
-    width: 100%;
-}
-
-.tx td {
-    padding: 5px;
-}
-
-.extraInput {
-    width: 100%;
-    border: 2px dashed #555;
-    padding: 5px 15px;
-    border-radius: 10px;
-}
-
-.extraButton {
-    border-width: 0px;
-    padding: 10px 15px;
-    border-radius: 10px;
-    background-color: #148f2b;
-    color: #fff;
-    cursor: pointer;
-    transition: background .1s ease-in-out;
-}
-
-.orange-bg{
-    background: rgb(227, 98, 27) !important;
-}
-
-.orange-bg:hover{
-    background: rgb(255, 107, 28) !important;
-}
-
-.extraButton:hover {
-    background-color: #16a431;
+    background: linear-gradient(254.93deg, rgb(175, 178, 36) 9.3%, rgb(21, 180, 129) 48.25%, rgb(0, 182, 222) 90.35%);
 }
 
 .center {
@@ -145,28 +71,108 @@ input[type=file]::file-selector-button:hover {
 }
 
 #error {
-    color: red;
-    transition: background .2s ease-in-out, border .2s ease-in-out;
+    color: #000;
+
 }
 
 .label {
-    font-weight: bold;
     background: #fff;
-    padding: 10px;
-    border-radius: 10px;
-    margin: 12px 0px;
+    border-radius: 1rem;
+    padding: 1rem;
     box-shadow: rgba(45, 73, 88, 0.02) 0px 12px 24px;
-    color: #000;
-}
-
-.group-value {
-    padding: 5px 3px;
+    color: #555;
+    font-weight: bold;
 }
 
 
-.logo{
-    background-image: url(/images/logo.png);
-    background-position: bottom right;
-    background-repeat: no-repeat;
-    background-size: 30%;
+.border-gradient{
+    background: radial-gradient(circle at 100% 100%, #ffffff 0, #ffffff 11px, transparent 11px) 0% 0%/16px 16px no-repeat,
+    radial-gradient(circle at 0 100%, #ffffff 0, #ffffff 11px, transparent 11px) 100% 0%/16px 16px no-repeat,
+    radial-gradient(circle at 100% 0, #ffffff 0, #ffffff 11px, transparent 11px) 0% 100%/16px 16px no-repeat,
+    radial-gradient(circle at 0 0, #ffffff 0, #ffffff 11px, transparent 11px) 100% 100%/16px 16px no-repeat,
+    linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 10px) calc(100% - 32px) no-repeat,
+    linear-gradient(#ffffff, #ffffff) 50% 50%/calc(100% - 32px) calc(100% - 10px) no-repeat,
+    linear-gradient(293deg, rgb(175,178,36) 0%, rgb(21,180,129) 50%, rgb(0,182,222) 100%);
+    border-radius: 16px;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.input-text{
+
+    border: 0px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    text-align: center;
+
+    width: 99%;
+
+    display: block;
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.input-text:focus {
+    outline: 0;
+    box-shadow: rgba(45, 73, 88, 0.05) 0px 12px 24px;
+}
+
+.m-2{
+    padding: 1.2rem;
+}
+
+.m{
+    padding: 0rem 2rem 1.3rem 2rem;
+}
+
+.b2{
+    border-top:1px solid rgba(0,0,0,0.08);
+    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(0,0,0,0.05) 100%);
+}
+
+
+.close-btn{
+    display: inline-block;
+    background: #b33232;
+    width:1.3rem;
+    height: 1.3rem;
+    text-align: center;
+    line-height: 1.3rem;
+    border-radius: 1.3rem;
+    color: #fff5dd;
+    margin-right: 0.5rem;
+}
+
+/* default state */
+input[type='date'], input[type='time'] {
+    -webkit-appearance: none;
+    color: #999;
+}
+
+
+/* small desktop */
+@media all and (max-width: 1200px) {
+
+}
+
+/* tablet */
+@media all and (max-width: 1024px) {
+    .tb{
+        min-width: 80%;
+    }
+    * {
+        font-size: 1.7rem;
+    }
+    .m{
+
+    }
+}
+
+/* mobile phone */
+@media all and (max-width: 768px) {
+
 }
