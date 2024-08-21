@@ -20,7 +20,7 @@ import ru.jamsys.core.extension.http.HttpAsyncResponse;
 import ru.jamsys.core.flat.template.twix.TemplateTwix;
 import ru.jamsys.core.flat.util.JsonEnvelope;
 import ru.jamsys.core.flat.util.Util;
-import ru.jamsys.core.flat.util.UtilFile;
+import ru.jamsys.core.flat.util.UtilFileResource;
 import ru.jamsys.core.flat.util.UtilJson;
 import ru.jamsys.core.promise.Promise;
 import ru.jamsys.core.promise.PromiseGenerator;
@@ -30,10 +30,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Component
@@ -83,6 +80,7 @@ public class Main implements PromiseGenerator, HttpHandler {
                     }
                     if (mapEscaped.containsKey("suip") && mapEscaped.containsKey("date") && mapEscaped.containsKey("find")) {
                         promise.goTo("payment");
+                        return;
                     }
                     promise.goTo("end");
                 })
@@ -127,6 +125,14 @@ public class Main implements PromiseGenerator, HttpHandler {
                     promise.goTo("payment");
                 })
                 .then("payment", (_, promise) -> {
+
+                    String suip = promise.getRepositoryMap("suip", String.class);
+                    if (suip == null || !suip.equals("100776404158ZNSW")) {
+                        promise.setMapRepository("error", "СУИП не найден");
+                        promise.goTo("end");
+                        return;
+                    }
+
                     HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
                     HttpServletResponse response = input.getResponse();
 
@@ -137,7 +143,10 @@ public class Main implements PromiseGenerator, HttpHandler {
 
                     List<DataContainer> dataList = new ArrayList<>();
                     DataContainer sampleBean = new DataContainer();
-                    sampleBean.setDetailsMap(PrepareDataTemplate.parse(new String(UtilFile.readBytes("security/data.json"))));
+                    //sampleBean.setDetailsMap(PrepareDataTemplate.parse(new String(UtilFile.readBytes("security/data.json"))));
+                    sampleBean.setDetailsMap(PrepareDataTemplate.parse(
+                            UtilFileResource.getAsString("data.json")
+                    ));
                     dataList.add(sampleBean);
                     JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
 
@@ -157,8 +166,6 @@ public class Main implements PromiseGenerator, HttpHandler {
                 .onComplete((_, promise) -> {
                     HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
                     if (promise.getRepositoryMap("redirect", Boolean.class, false)) {
-//                        input.setBodyFromMap(new HashMapBuilder<>().append("x", promise.getRepositoryMap("uri", String.class)));
-//                        input.complete();
                         input.getResponse().setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
                         input.getResponse().setHeader("Location", promise.getRepositoryMap("uri", String.class));
                         input.getCompletableFuture().complete(null);
@@ -166,11 +173,14 @@ public class Main implements PromiseGenerator, HttpHandler {
                         input.getCompletableFuture().complete(null);
                     } else {
                         input.setResponseContentType("text/html");
+                        String suip = promise.getRepositoryMap("error", String.class, "").isEmpty()
+                                ? promise.getRepositoryMap("suip", String.class, "")
+                                : "";
                         input.setBody(TemplateTwix.template(
                                 Util.getWebContent("upload.html"),
                                 new HashMapBuilder<String, String>()
-                                        .append("rquid", java.util.UUID.randomUUID().toString())
-                                        .append("suip", promise.getRepositoryMap("suip", String.class, ""))
+                                        .append("rquid", UUID.randomUUID().toString())
+                                        .append("suip", suip)
                                         .append("date", promise.getRepositoryMap("date", String.class, Util.getDate("yyyy-MM-dd")))
                                         .append("errorShow", promise.getRepositoryMap("error", String.class, "").isEmpty() ? "none" : "table-row")
                                         .append("error", promise.getRepositoryMap("error", String.class, ""))
@@ -186,7 +196,7 @@ public class Main implements PromiseGenerator, HttpHandler {
                             Util.getWebContent("upload.html"),
                             new HashMapBuilder<String, String>()
                                     .append("rquid", java.util.UUID.randomUUID().toString())
-                                    .append("suip", promise.getRepositoryMap("suip", String.class, ""))
+                                    .append("suip", "")
                                     .append("date", promise.getRepositoryMap("date", String.class, Util.getDate("yyyy-MM-dd")))
                                     .append("errorShow", promise.getRepositoryMap("error", String.class, "").isEmpty() ? "none" : "table-row")
                                     .append("error", promise.getRepositoryMap("error", String.class, ""))
