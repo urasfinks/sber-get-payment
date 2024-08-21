@@ -27,3 +27,23 @@ window.blank = function (url) {
     anchor.target = "_blank";
     anchor.click();
 }
+
+window.formDataSubmit = function () {
+    $$("form-data").submit();
+}
+
+document.getElementById("form-data").onkeydown = function (evt) {
+    var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+    if (keyCode == 13) {
+        window.formDataSubmit();
+    }
+};
+
+onReady(function () {
+    setTimeout(function () {
+        var suip = $$("suip").value;
+        if (suip != undefined && suip.trim() !== "") {
+            window.formDataSubmit();
+        }
+    }, 1000);
+})

@@ -37,7 +37,7 @@ import java.util.Map;
 
 
 @Component
-@RequestMapping("/")
+@RequestMapping("/**")
 public class Main implements PromiseGenerator, HttpHandler {
 
     @Getter
@@ -55,42 +55,71 @@ public class Main implements PromiseGenerator, HttpHandler {
         return servicePromise.get(index, 7_000L)
                 .then("init", (_, promise) -> {
                     HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
-                    Map<String, String> map = input.getHttpRequestReader().getMap();
-                    if (map.containsKey("file")) {
+                    Map<String, String> mapEscaped = input.getHttpRequestReader().getMapEscapedHtmlSpecialChars();
+                    if (mapEscaped.containsKey("date-iso")) {
+                        mapEscaped.put("date", Util.timestampToDateFormat(
+                                Util.getTimestamp(mapEscaped.get("date-iso"), "yyyy-MM-dd"),
+                                "dd.MM.yyyy"
+                        ));
+                    }
+                    if (mapEscaped.containsKey("file")) {
                         promise.goTo("readQr");
                         return;
                     }
-                    if (map.containsKey("suip") && map.containsKey("date")) {
-                        promise.setMapRepository("suip", map.get("suip"));
-                        promise.setMapRepository("date", map.get("date"));
+                    if (mapEscaped.containsKey("suip")) {
+                        String suip = mapEscaped.get("suip");
+                        if (suip == null || suip.isEmpty()) {
+                            promise.setMapRepository("error", "СУИП пустой");
+                            promise.goTo("end");
+                            return;
+                        }
+                        promise.setMapRepository("suip", suip);
+                    }
+                    if (mapEscaped.containsKey("date")) {
+                        promise.setMapRepository("date", Util.timestampToDateFormat(
+                                Util.getTimestamp(mapEscaped.get("date"), "dd.MM.yyyy"),
+                                "yyyy-MM-dd"
+                        ));
+                    }
+                    if (mapEscaped.containsKey("suip") && mapEscaped.containsKey("date") && mapEscaped.containsKey("find")) {
                         promise.goTo("payment");
                     }
-                    promise.goTo("finishHtml");
+                    promise.goTo("end");
                 })
                 .then("readQr", (_, promise) -> {
                     HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
                     InputStream file = input.getHttpRequestReader().getMultiPartFormData("file");
                     String s = QRReader.readQRCode(file);
-                    if (!s.startsWith("{")) {
-                        promise.setMapRepository("error", "Не json");
-                        promise.goTo("finishHtml");
-                        return;
+
+                    if (s.startsWith("{")) {
+                        promise.setMapRepository("jsonQr", s);
+                        promise.goTo("parseJsonQr");
+                    } else if (s.startsWith("http://") || s.startsWith("https://")) {
+                        promise.setMapRepository("uri", "/" + s.substring(s.indexOf("?")));
+                        promise.setMapRepository("redirect", true);
+                        promise.goTo("end");
+                    } else {
+                        promise.setMapRepository("error", "Не корректный QR");
+                        promise.goTo("end");
                     }
+                })
+                .then("parseJsonQr", (_, promise) -> {
+                    String s = promise.getRepositoryMap("jsonQr", String.class);
                     JsonEnvelope<Map<Object, Object>> map = UtilJson.toMap(s);
                     if (map.getException() != null) {
-                        promise.setMapRepository("error", "json плохо спарсился");
-                        promise.goTo("finishHtml");
+                        promise.setMapRepository("error", "При обработке QR возникли ошибки");
+                        promise.goTo("end");
                         return;
                     }
                     Map<Object, Object> object = map.getObject();
                     if (!object.containsKey("suip")) {
-                        promise.setMapRepository("error", "В QR нет СУИП");
-                        promise.goTo("finishHtml");
+                        promise.setMapRepository("error", "QR не содержит СУИП");
+                        promise.goTo("end");
                         return;
                     }
                     if (!object.containsKey("date")) {
-                        promise.setMapRepository("error", "В QR нет даты");
-                        promise.goTo("finishHtml");
+                        promise.setMapRepository("error", "QR не содержит даты");
+                        promise.goTo("end");
                         return;
                     }
                     promise.setMapRepository("suip", object.get("suip"));
@@ -100,46 +129,69 @@ public class Main implements PromiseGenerator, HttpHandler {
                 .then("payment", (_, promise) -> {
                     HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
                     HttpServletResponse response = input.getResponse();
-                    try {
-                        String location = App.get(ServiceProperty.class).get("run.args.web.resource.location");
 
-                        JasperDesign jasperDesign = JRXmlLoader.load(new File(location + "payment.jrxml"));
-                        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+                    String location = App.get(ServiceProperty.class).get("run.args.web.resource.location");
 
-                        List<DataContainer> dataList = new ArrayList<>();
-                        DataContainer sampleBean = new DataContainer();
-                        sampleBean.setDetailsMap(PrepareDataTemplate.parse(new String(UtilFile.readBytes("security/data.json"))));
-                        dataList.add(sampleBean);
-                        JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
+                    JasperDesign jasperDesign = JRXmlLoader.load(new File(location + "payment.jrxml"));
+                    JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
-                        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<>(), beanColDataSource);
+                    List<DataContainer> dataList = new ArrayList<>();
+                    DataContainer sampleBean = new DataContainer();
+                    sampleBean.setDetailsMap(PrepareDataTemplate.parse(new String(UtilFile.readBytes("security/data.json"))));
+                    dataList.add(sampleBean);
+                    JRBeanCollectionDataSource beanColDataSource = new JRBeanCollectionDataSource(dataList);
 
-                        BufferedImage image = (BufferedImage) JasperPrintManager.printPageToImage(jasperPrint, 0, 5f);
-                        ImageIO.write(image, "jpg", response.getOutputStream());
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<>(), beanColDataSource);
 
-                        response.setContentType("image/jpeg");
+                    BufferedImage image = (BufferedImage) JasperPrintManager.printPageToImage(jasperPrint, 0, 5f);
+                    ImageIO.write(image, "jpg", response.getOutputStream());
 
-                    } catch (Throwable th) {
-                        App.error(th);
-                    }
+                    response.setContentType("image/jpeg");
+
                     promise.setMapRepository("paymentPrint", true);
+                    promise.goTo("end");
                 })
-                .then("finishHtml", (_, promise) -> {
-                    promise.setMapRepository("paymentPrint", false);
+                .then("end", (_, _) -> {
+                    //Терминальный
                 })
                 .onComplete((_, promise) -> {
                     HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
-                    if (promise.getRepositoryMap("paymentPrint", Boolean.class)) {
+                    if (promise.getRepositoryMap("redirect", Boolean.class, false)) {
+//                        input.setBodyFromMap(new HashMapBuilder<>().append("x", promise.getRepositoryMap("uri", String.class)));
+//                        input.complete();
+                        input.getResponse().setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+                        input.getResponse().setHeader("Location", promise.getRepositoryMap("uri", String.class));
+                        input.getCompletableFuture().complete(null);
+                    } else if (promise.getRepositoryMap("paymentPrint", Boolean.class, false)) {
                         input.getCompletableFuture().complete(null);
                     } else {
                         input.setResponseContentType("text/html");
                         input.setBody(TemplateTwix.template(
                                 Util.getWebContent("upload.html"),
                                 new HashMapBuilder<String, String>()
+                                        .append("rquid", java.util.UUID.randomUUID().toString())
+                                        .append("suip", promise.getRepositoryMap("suip", String.class, ""))
+                                        .append("date", promise.getRepositoryMap("date", String.class, Util.getDate("yyyy-MM-dd")))
+                                        .append("errorShow", promise.getRepositoryMap("error", String.class, "").isEmpty() ? "none" : "table-row")
                                         .append("error", promise.getRepositoryMap("error", String.class, ""))
                         ));
                         input.complete();
                     }
+                })
+                .onError((_, promise) -> {
+                    HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
+                    promise.setMapRepository("error", promise.getException().getMessage());
+                    input.setResponseContentType("text/html");
+                    input.setBody(TemplateTwix.template(
+                            Util.getWebContent("upload.html"),
+                            new HashMapBuilder<String, String>()
+                                    .append("rquid", java.util.UUID.randomUUID().toString())
+                                    .append("suip", promise.getRepositoryMap("suip", String.class, ""))
+                                    .append("date", promise.getRepositoryMap("date", String.class, Util.getDate("yyyy-MM-dd")))
+                                    .append("errorShow", promise.getRepositoryMap("error", String.class, "").isEmpty() ? "none" : "table-row")
+                                    .append("error", promise.getRepositoryMap("error", String.class, ""))
+                    ));
+                    input.complete();
                 });
     }
 
