@@ -88,8 +88,24 @@ public class Main implements PromiseGenerator, HttpHandler {
                     HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
                     InputStream file = input.getHttpRequestReader().getMultiPartFormData("file");
                     String s = QRReader.readQRCode(file);
+                    //System.out.println(input.getHttpRequestReader().getMultiPartFormSubmittedFileName());
+                    //File targetFile = new File("web/1.jpg");
+                    //OutputStream outStream = new FileOutputStream(targetFile);
+                    //outStream.write(file.readAllBytes());
+                    //String s = null;
 
-                    if (s.startsWith("{")) {
+//                    String nameFile = input.getHttpRequestReader().getMultiPartFormSubmittedFileName().get("file");
+//                    InputStream file = nameFile.toUpperCase().endsWith(".HEIC")
+//                            ?
+//
+//                    : input.getHttpRequestReader().getMultiPartFormData("file");
+
+                    //String s = QRReader.readQRCode(file);
+                    //String s = null;
+                    if (s == null) {
+                        promise.setMapRepository("error", "QR не распознан");
+                        promise.goTo("end");
+                    } else if (s.startsWith("{")) {
                         promise.setMapRepository("jsonQr", s);
                         promise.goTo("parseJsonQr");
                     } else if (s.startsWith("http://") || s.startsWith("https://")) {
@@ -204,5 +220,6 @@ public class Main implements PromiseGenerator, HttpHandler {
                     input.complete();
                 });
     }
+
 
 }
