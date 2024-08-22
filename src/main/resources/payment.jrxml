@@ -168,7 +168,7 @@
 					<printWhenExpression><![CDATA[$F{detailsMap}.get("PRIVATEPAY_CONV_FIO").toString().length() > 0]]></printWhenExpression>
 				</reportElement>
 				<textElement verticalAlignment="Middle">
-					<font fontName="Arial"/>
+					<font fontName="PT Sans"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{detailsMap}.get("PRIVATEPAY_CONV_FIO")!=null ? $F{detailsMap}.get("PRIVATEPAY_CONV_FIO").toString().trim() : ""]]></textFieldExpression>
 			</textField>

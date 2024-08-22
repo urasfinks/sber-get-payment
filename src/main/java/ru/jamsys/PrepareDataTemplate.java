@@ -86,11 +86,9 @@ public class PrepareDataTemplate {
         result.put("A_PAYMETH_TXT", mapType.get(result.get("PayMethodCode")));
 
         // Маскировка
-        String unchecked = Character.toString((char)0x2610);
-        String checked = Character.toString((char)0x2611);
-        result.put("PRIVATEPAY_CONV_FIO", "SEX: "+unchecked+" M\t"+checked+" F");
-        //result.put("PRIVATEPAY_CONV_FIO", UtilHide.explodeLetterAndMask((String) result.get("PRIVATEPAY_CONV_FIO"), 2,4,30, "*").replace(" ", "  "));
-        result.put("C_PAY_CONFIRM_NARRATIVE", UtilHide.explodeLetterAndMask((String) result.get("C_PAY_CONFIRM_NARRATIVE"), 1,4,40, "*"));
+        String star = Character.toString((char)0x2217);
+        result.put("PRIVATEPAY_CONV_FIO", UtilHide.explodeLetterAndMask((String) result.get("PRIVATEPAY_CONV_FIO"), 2,4,30, star).replace(" ", "  "));
+        result.put("C_PAY_CONFIRM_NARRATIVE", UtilHide.explodeLetterAndMask((String) result.get("C_PAY_CONFIRM_NARRATIVE"), 1,4,40, star));
 
         return result;
     }
