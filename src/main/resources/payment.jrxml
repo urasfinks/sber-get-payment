@@ -167,7 +167,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<printWhenExpression><![CDATA[$F{detailsMap}.get("PRIVATEPAY_CONV_FIO").toString().length() > 0]]></printWhenExpression>
 				</reportElement>
-				<textElement>
+				<textElement verticalAlignment="Middle">
 					<font fontName="PT Sans"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{detailsMap}.get("PRIVATEPAY_CONV_FIO")!=null ? $F{detailsMap}.get("PRIVATEPAY_CONV_FIO").toString().trim() : ""]]></textFieldExpression>

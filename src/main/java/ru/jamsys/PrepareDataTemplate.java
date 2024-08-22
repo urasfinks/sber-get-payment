@@ -4,6 +4,7 @@ import ru.jamsys.core.App;
 import ru.jamsys.core.extension.builder.HashMapBuilder;
 import ru.jamsys.core.flat.util.Util;
 import ru.jamsys.core.flat.util.UtilFile;
+import ru.jamsys.core.flat.util.UtilHide;
 import ru.jamsys.core.flat.util.UtilJson;
 
 import java.io.IOException;
@@ -83,6 +84,11 @@ public class PrepareDataTemplate {
         result.put("C_PAY_CONFIRM_DATE", Util.getDate("dd.MM.yyyy HH:mm"));
         result.put("C_PAY_CONFIRM_PAYMETH_TYPE", mapOper.get(result.get("PayMethodCode")));
         result.put("A_PAYMETH_TXT", mapType.get(result.get("PayMethodCode")));
+
+        // Маскировка
+        String star = Character.toString((char)0x2217);
+        result.put("PRIVATEPAY_CONV_FIO", UtilHide.explodeLetterAndMask((String) result.get("PRIVATEPAY_CONV_FIO"), 2,4,30, star).replace(" ", "  "));
+        result.put("C_PAY_CONFIRM_NARRATIVE", UtilHide.explodeLetterAndMask((String) result.get("C_PAY_CONFIRM_NARRATIVE"), 1,4,40, star));
 
         return result;
     }
