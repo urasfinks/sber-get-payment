@@ -1,0 +1,46 @@
+{
+  "Status": 0,
+  "Description": "Успех",
+  "Result": {
+    "RqTm": "2023-08-24T10:22:16+03:00",
+    "spname": "PAYMENT_PRO",
+    "SetValue": 500,
+    "PaymentInfoList": [
+      {
+        "PaymentID": "12476686371",
+        "SUIP": "100776404158ZNSW",
+        "OperUID": "1fb4fa37f0237440e063b25c380afc2d",
+        "PaymentDate": "2024-08-15T10:41:57+03:00",
+        "PaymentStatus": 0,
+        "PaymentStatusFront": "Платеж перечислен",
+        "PaymentStatusNum": "5.4.4",
+        "PayerInfo": {
+          "DPAN": "522860F05A199438",
+          "FIO": "Орлов Алексей Тестович",
+          "PayerAcc": "40817810138110173429"
+        },
+        "PayeeInfo": {
+          "NameReceiver": "ЛЁВИНА РАДОСТЬ_ЦСР_РКО_ЕДИН",
+          "ServiceName": "Лёвина Радость_ЦСР_РКО_един",
+          "INN": "8848116085",
+          "Account": "40702810670000000034",
+          "BankInfo": {
+            "BIC": "040813608",
+            "BankName": "ДАЛЬНЕВОСТОЧНЫЙ БАНК ПАО СБЕРБАНК",
+            "BankAcc": "30101810600000000608"
+          }
+        },
+        "TotalSum": "101",
+        "Sum": "100",
+        "SumFee": "1",
+        "DocNumber": "4",
+        "DocDate": "2024-08-15",
+        "Narrative": "PAYERNAME: ФАМИЛИЯ ИМЯ ОТЧЕСТВО; PURPOSE: ДЛЯ ТЕСТА; EXCLUDE_REQS: EXCLUDE_REQS@INSURANCE_PASS_RF@;",
+        "PayMethodCode": 2,
+        "ChannelType": "СберБанк онлайн",
+        "SumCur": "RUR",
+        "TransferDate": "2024-08-15"
+      }
+    ]
+  }
+}
