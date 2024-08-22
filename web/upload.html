@@ -12,7 +12,7 @@
 <table class="center tb">
     <tr style="display: ${errorShow};">
         <td class="td-round-2">
-            <div id="error" class="m-2"> <span class="close-btn">&times;</span> ${error}</div>
+            <div id="error" class="m-2"> <a href="/" class="close-btn">&times;</a> ${error}</div>
         </td>
     </tr>
     <tr>
@@ -20,8 +20,8 @@
     </tr>
     <tr>
         <td class="td-round">
-            <div class="m" style="margin-top: 3rem;">
-                <div class="label">Поиск платежа (ифт)</div>
+            <div class="m" style="margin-top: 0rem;padding-bottom: 1rem;">
+                <div class="label" style="padding:2.3rem 1rem;">Поиск платежа (ифт)</div>
             </div>
             <form action="/${rquid}" method="post" id="form-data" autocomplete="off">
                 <div class="m">
@@ -31,7 +31,7 @@
                     <table>
                         <tr>
                             <td>
-                                <input name="date-iso" id="date-iso" autocomplete="off" type="date" style="font:inherit;text-align: center;" value="${date}" class="input-text border-gradient" placeholder="Дата">
+                                <input name="date-iso" id="date-iso" autocomplete="off" type="date" style="font-family:inherit;" value="${date}" class="input-text border-gradient" placeholder="Дата">
                             </td>
                             <td width="1%">&nbsp;&nbsp;</td>
                             <td width="1%">
@@ -54,7 +54,7 @@
                 <!--<div class="label" style="background: transparent;box-shadow:none;">QR</div>-->
                 <form method="POST" style="cursor: pointer;padding: 3rem 0px;" enctype="multipart/form-data" id="form-qr" action="/">
                     <label for="upload" class="drop-container" id="dropcontainer">
-                        Выбрать QR код
+                        <span class="bg-qr">QR код</span>
                         <input type="file" id="upload" name="file" required size="1" accept="image/jpeg" onchange="$$('form-qr').submit()">
                     </label>
                 </form>
