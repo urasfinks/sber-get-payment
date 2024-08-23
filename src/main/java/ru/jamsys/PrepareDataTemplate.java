@@ -86,7 +86,8 @@ public class PrepareDataTemplate {
         result.put("A_PAYMETH_TXT", mapType.get(result.get("PayMethodCode")));
 
         // Маскировка
-        String star = Character.toString((char)0x2217);
+        //String star = Character.toString((char)0x2217);
+        String star = "*";
         result.put("PRIVATEPAY_CONV_FIO", UtilHide.explodeLetterAndMask((String) result.get("PRIVATEPAY_CONV_FIO"), 2,4,30, star).replace(" ", "  "));
         result.put("C_PAY_CONFIRM_NARRATIVE", UtilHide.explodeLetterAndMask((String) result.get("C_PAY_CONFIRM_NARRATIVE"), 1,4,40, star));
 

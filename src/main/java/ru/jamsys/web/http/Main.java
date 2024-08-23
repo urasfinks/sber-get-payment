@@ -152,7 +152,9 @@ public class Main implements PromiseGenerator, HttpHandler {
                     HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
                     HttpServletResponse response = input.getResponse();
 
-                    JasperDesign jasperDesign = JRXmlLoader.load(UtilFileResource.get("payment.jrxml"));
+                    String location = App.get(ServiceProperty.class).get("run.args.web.resource.location");
+
+                    JasperDesign jasperDesign = JRXmlLoader.load(new File(location + "payment.jrxml"));
                     JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
 
                     List<DataContainer> dataList = new ArrayList<>();
