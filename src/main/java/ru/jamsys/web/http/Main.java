@@ -204,6 +204,7 @@ public class Main implements PromiseGenerator, HttpHandler {
                 })
                 .onError((_, promise) -> {
                     HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
+                    App.error(promise.getException());
                     promise.setMapRepository("error", promise.getException().getMessage());
                     input.setResponseContentType("text/html");
                     input.setBody(TemplateTwix.template(
