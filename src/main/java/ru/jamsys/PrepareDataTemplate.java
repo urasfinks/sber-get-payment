@@ -149,6 +149,7 @@ public class PrepareDataTemplate {
                 .append("addres", "Адрес")
                 .append("adres", "Адрес")
                 .append("ls", "Лицевой счёт")
+                .append("pacc", "Лицевой счёт")
                 .append("persacc", "Лицевой счёт")
                 .append("pers_acc", "Лицевой счёт")
                 .append("lsc", "Лицевой счёт");
