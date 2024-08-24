@@ -51,6 +51,12 @@
             margin-top:-0.0mm;
             line-height: 6.6mm;
         }
+        .nazn-label{
+            font-size: 14pt;
+            letter-spacing: 0.01px;
+            margin-top:10.0mm;
+            color:#808080;
+        }
     </style>
 </head>
 <body>
@@ -72,14 +78,7 @@
         <p class="value">${SUIP}</p>
     </div>
     <div class="NAZN" style="padding-left:7mm;">
-        <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:10.0mm;color:#808080;">Адрес</p>
-        <p class="value">Санкт-Петербург, ЖУКОВА УЛ., д.1 СТР. 1, кв.59-Н</p>
-
-        <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:10.0mm;color:#808080;">Наименование для суммы1</p>
-        <p class="value">НО "ФКР МКД СПб" Сумма</p>
-
-        <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:10.0mm;color:#808080;">Наименование для пени1</p>
-        <p class="value">НО "ФКР МКД СПб" Пени</p>
+        ${naznRender}
     </div>
     <div style="padding-left:7mm;">
         <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:10.0mm;color:#808080;">Получатель</p>

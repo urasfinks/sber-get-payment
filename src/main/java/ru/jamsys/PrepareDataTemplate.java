@@ -10,6 +10,7 @@ import ru.jamsys.core.flat.util.UtilJson;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -107,13 +108,61 @@ public class PrepareDataTemplate {
         result.put("C_PAY_CONFIRM_PAYMETH_TYPE", mapOper.get(result.get("PayMethodCode")));
         result.put("A_PAYMETH_TXT", mapType.get(result.get("PayMethodCode")));
 
+        result.put("NaznParsed", ufoParse((String) result.get("Nazn"), ":", ";"));
 
         String star = "*";
         result.put("FIO", UtilHide.explodeLetterAndMask((String) result.get("FIO"), 2,4,30, star).replace(" ", "  "));
         result.put("Nazn", UtilHide.explodeLetterAndMask((String) result.get("Nazn"), 1,4,40, star));
 
-
         return result;
+    }
+
+    public static Map<String, String> ufoParse(String req_ufo, String key_del, String main_del) {
+        Map<String, String> result = new LinkedHashMap<>();
+        String[] main_split = req_ufo.split(main_del);
+
+        String last_key = "";
+        String key = "";
+        String value = "";
+
+        for (int i = 0; i < main_split.length; i++) {
+            if (main_split[i].indexOf(key_del) <= 0) {
+                value = main_split[i];
+                key = last_key;
+            } else {
+                key = main_split[i].substring(0, main_split[i].indexOf(key_del));
+                last_key = key;
+                value = main_split[i].substring(main_split[i].indexOf(key_del) + 1);
+            }
+            if (result.containsKey(key)) {
+                result.put(key.trim(), (result.get(key) + main_del + value).trim());
+            } else {
+                result.put(key.trim(), (value).trim());
+            }
+        }
+        result.remove("EXCLUDE_REQS");
+        Map<String, String> replaceReqKey = new HashMapBuilder<String, String>()
+                .append("fio", "ФИО")
+                .append("payername", "ФИО")
+                .append("address", "Адрес")
+                .append("adress", "Адрес")
+                .append("addres", "Адрес")
+                .append("adres", "Адрес")
+                .append("ls", "Лицевой счёт")
+                .append("persacc", "Лицевой счёт")
+                .append("pers_acc", "Лицевой счёт")
+                .append("lsc", "Лицевой счёт");
+        Map<String, String> ret = new HashMap<>();
+        result.forEach((k, v) -> {
+            String loweKey = k.toLowerCase();
+            v = UtilHide.explodeLetterAndMask(v, 1,4,40, "*");
+            if (replaceReqKey.containsKey(loweKey)) {
+                ret.put(replaceReqKey.get(loweKey), v);
+            } else {
+                ret.put(Util.ucword(loweKey), v);
+            }
+        });
+        return ret;
     }
 
 }

@@ -9,6 +9,7 @@ import ru.jamsys.PrepareDataTemplate;
 import ru.jamsys.core.App;
 import ru.jamsys.core.component.ServicePromise;
 import ru.jamsys.core.extension.http.HttpAsyncResponse;
+import ru.jamsys.core.flat.util.Util;
 import ru.jamsys.core.flat.util.UtilFileResource;
 import ru.jamsys.core.promise.Promise;
 import ru.jamsys.core.promise.PromiseGenerator;
@@ -44,6 +45,17 @@ public class Html implements PromiseGenerator, HttpHandler {
                     Map<String, Object> parse = PrepareDataTemplate.parse(
                             UtilFileResource.getAsString("data.json")
                     );
+
+                    @SuppressWarnings("unchecked")
+                    Map<String, String> naznParsed = (Map<String, String>) parse.get("NaznParsed");
+
+                    StringBuilder sb = new StringBuilder();
+                    naznParsed.forEach((key, value) -> {
+                        sb.append("<p class=\"nazn-label\">" + Util.htmlEntity(key) + "</p>\n" +
+                                "<p class=\"value\">" + Util.htmlEntity(value) + "</p>");
+                    });
+
+                    parse.put("naznRender", sb.toString());
 
                     input.getResponse().getOutputStream().write(HtmlPdfGenerator.convert(
                             HtmlPdfGenerator.pdf("pdf.html", parse),
