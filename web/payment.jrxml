@@ -114,7 +114,7 @@
 				<textElement>
 					<font fontName="PT Sans" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Платеж включен в платежное поручение №" + ($F{detailsMap}.get("PAYORDER_CONV_NDOC")==null ? "" : $F{detailsMap}.get("PAYORDER_CONV_NDOC"))  + " от " +($F{detailsMap}.get("C_PAY_CONFIRM_OPERDATE")==null ? "" : $F{detailsMap}.get("C_PAY_CONFIRM_OPERDATE"))]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Платеж включен в платежное поручение №" + ($F{detailsMap}.get("DocNumber")==null ? "" : $F{detailsMap}.get("DocNumber"))  + " от " +($F{detailsMap}.get("DocDate")==null ? "" : $F{detailsMap}.get("DocDate"))]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="1" y="679" width="150" height="14" forecolor="#808080" uuid="e2a78f8d-e5de-4ec1-a79a-2c8e840250e5">
@@ -137,7 +137,7 @@
 			<staticText>
 				<reportElement x="0" y="60" width="100" height="14" forecolor="#808080" uuid="563910ba-1c37-4952-9136-16d5cc4d7d41">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<printWhenExpression><![CDATA[$F{detailsMap}.get("PRIVATEPAY_CONV_FIO").toString().length() > 0]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{detailsMap}.get("FIO").toString().length() > 0]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font fontName="PT Sans"/>
@@ -165,12 +165,12 @@
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="75" width="249" height="29" uuid="e26a60a9-dda7-465c-931e-f4626950b4cb">
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
-					<printWhenExpression><![CDATA[$F{detailsMap}.get("PRIVATEPAY_CONV_FIO").toString().length() > 0]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{detailsMap}.get("FIO").toString().length() > 0]]></printWhenExpression>
 				</reportElement>
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("PRIVATEPAY_CONV_FIO")!=null ? $F{detailsMap}.get("PRIVATEPAY_CONV_FIO").toString().trim() : ""]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("FIO")!=null ? $F{detailsMap}.get("FIO").toString().trim() : ""]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="128" width="249" height="14" uuid="d93aad76-eeb0-4f40-9bb0-3bfc00929e76">
@@ -206,7 +206,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("C_PAY_CONFIRM_SUM")==null ? "" : $F{detailsMap}.get("C_PAY_CONFIRM_SUM")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("Sum")==null ? "" : $F{detailsMap}.get("Sum")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="301" y="89" width="192" height="49" uuid="f0bd015a-d889-4784-bb18-b87767c3958b">
@@ -215,7 +215,7 @@
 				<textElement>
 					<font fontName="PT Sans" size="8"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("amountString")==null ? "" : $F{detailsMap}.get("amountString")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("AmountString")==null ? "" : $F{detailsMap}.get("AmountString")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="301" y="144" width="192" height="14" forecolor="#808080" uuid="9ef4bdac-ce16-4565-a621-19c75c86ccb4">
@@ -233,7 +233,7 @@
 				<textElement>
 					<font fontName="PT Sans" size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("C_PAY_CONFIRM_CHANNEL")==null ? "" : $F{detailsMap}.get("C_PAY_CONFIRM_CHANNEL")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("ChannelType")==null ? "" : $F{detailsMap}.get("ChannelType")]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="201" width="497" height="1" forecolor="#808080" uuid="edda4657-9a31-47db-b2ff-af7bb658a8af"/>
@@ -254,7 +254,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("PAYORDER_CONV_RECNAME")==null ? "" : $F{detailsMap}.get("PAYORDER_CONV_RECNAME")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("NameReceiver")==null ? "" : $F{detailsMap}.get("NameReceiver")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="301" y="209" width="130" height="14" forecolor="#808080" uuid="6c43a329-6db0-4bf2-82bc-df882732c024">
@@ -272,7 +272,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("PAYORDER_CONV_RECINN")==null ? "" : $F{detailsMap}.get("PAYORDER_CONV_RECINN")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("INN")==null ? "" : $F{detailsMap}.get("INN")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="301" y="281" width="130" height="14" forecolor="#808080" uuid="d2b4b5ca-9fb5-4e3c-8abd-f55348967cbd">
@@ -311,7 +311,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("PAYORDER_CONV_RECACC")==null ? "" : $F{detailsMap}.get("PAYORDER_CONV_RECACC")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("Account")==null ? "" : $F{detailsMap}.get("Account")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="328" width="100" height="14" forecolor="#808080" uuid="9255408a-fe4d-4fdd-a44d-9d26d4af3b91">
@@ -329,7 +329,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("PAYORDER_CONV_RECBANKNAME")==null ? "" : $F{detailsMap}.get("PAYORDER_CONV_RECBANKNAME")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("BankName")==null ? "" : $F{detailsMap}.get("BankName")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="301" y="328" width="100" height="14" forecolor="#808080" uuid="72290a01-5529-4b67-87b7-1c9a5c57c581">
@@ -347,7 +347,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("PAYORDER_CONV_RECBANKBIC")==null ? "" : $F{detailsMap}.get("PAYORDER_CONV_RECBANKBIC")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("BIC")==null ? "" : $F{detailsMap}.get("BIC")]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="409" width="497" height="1" forecolor="#808080" uuid="4c3f3e33-6697-4ce2-907c-3ddf7538e598"/>
@@ -368,7 +368,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("PAYORDER_CONV_RECBANKACC")==null ? "" : $F{detailsMap}.get("PAYORDER_CONV_RECBANKACC")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("BankAcc")==null ? "" : $F{detailsMap}.get("BankAcc")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="419" width="100" height="14" forecolor="#808080" uuid="3dcecd6a-1c31-4093-8ed4-4daba9c098ac">
@@ -386,14 +386,14 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("PRIVATEPAY_CONV_PRIVATEPAYID")==null ? "" : $F{detailsMap}.get("PRIVATEPAY_CONV_PRIVATEPAYID")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("SUIP")==null ? "" : $F{detailsMap}.get("SUIP")]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="520" width="496" height="104" uuid="546f7e41-61a4-450e-b3bd-5e3c4d474b6a"/>
 				<textElement textAlignment="Justified">
 					<font fontName="PT Sans" size="6.6"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("C_PAY_CONFIRM_NARRATIVE")==null ? "" : $F{detailsMap}.get("C_PAY_CONFIRM_NARRATIVE")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("Nazn")==null ? "" : $F{detailsMap}.get("Nazn")]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="459" width="497" height="1" forecolor="#808080" uuid="6f6bec99-1e30-4052-9c6a-84c7f8567ed6"/>
@@ -423,7 +423,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("C_PAY_CONFIRM_PAYDATE")==null ? "" : $F{detailsMap}.get("C_PAY_CONFIRM_PAYDATE")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("PaymentDate")==null ? "" : $F{detailsMap}.get("PaymentDate")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="300" y="469" width="100" height="14" forecolor="#808080" uuid="5094e776-1ff1-447c-a435-35bf1f43407f">

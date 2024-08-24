@@ -34,21 +34,23 @@ public class PrepareDataTemplate {
         UtilJson.selector(
                 json,
                 new HashMapBuilder<String, String>()
-                        .append("C_PAY_CONFIRM_NARRATIVE", "$.Result.PaymentInfoList[0].Narrative")
-                        .append("C_PAY_CONFIRM_PAYDATE", "$.Result.PaymentInfoList[0].PaymentDate")
-                        .append("PRIVATEPAY_CONV_PRIVATEPAYID", "$.Result.PaymentInfoList[0].SUIP")
-                        .append("PAYORDER_CONV_RECBANKACC", "$.Result.PaymentInfoList[0].PayeeInfo.BankInfo.BankAcc")
-                        .append("PAYORDER_CONV_RECBANKBIC", "$.Result.PaymentInfoList[0].PayeeInfo.BankInfo.BIC")
-                        .append("PAYORDER_CONV_RECBANKNAME", "$.Result.PaymentInfoList[0].PayeeInfo.BankInfo.BankName")
-                        .append("PAYORDER_CONV_RECACC", "$.Result.PaymentInfoList[0].PayeeInfo.Account")
-                        .append("PAYORDER_CONV_RECNAME", "$.Result.PaymentInfoList[0].PayeeInfo.ServiceName")
-                        .append("PAYORDER_CONV_RECINN", "$.Result.PaymentInfoList[0].PayeeInfo.INN")
-                        .append("PAYORDER_CONV_NDOC", "$.Result.PaymentInfoList[0].DocNumber")
-                        .append("C_PAY_CONFIRM_OPERDATE", "$.Result.PaymentInfoList[0].DocDate")
+                        .append("SumFee", "$.Result.PaymentInfoList[0].SumFee")
+                        .append("Nazn", "$.Result.PaymentInfoList[0].Narrative")
+                        .append("PaymentDate", "$.Result.PaymentInfoList[0].PaymentDate")
+                        .append("SUIP", "$.Result.PaymentInfoList[0].SUIP")
+                        .append("BankAcc", "$.Result.PaymentInfoList[0].PayeeInfo.BankInfo.BankAcc")
+                        .append("BIC", "$.Result.PaymentInfoList[0].PayeeInfo.BankInfo.BIC")
+                        .append("BankName", "$.Result.PaymentInfoList[0].PayeeInfo.BankInfo.BankName")
+                        .append("Account", "$.Result.PaymentInfoList[0].PayeeInfo.Account")
+                        .append("ServiceName", "$.Result.PaymentInfoList[0].PayeeInfo.ServiceName")
+                        .append("NameReceiver", "$.Result.PaymentInfoList[0].PayeeInfo.NameReceiver")
+                        .append("INN", "$.Result.PaymentInfoList[0].PayeeInfo.INN")
+                        .append("DocNumber", "$.Result.PaymentInfoList[0].DocNumber")
+                        .append("DocDate", "$.Result.PaymentInfoList[0].DocDate")
                         .append("PayMethodCode", "$.Result.PaymentInfoList[0].PayMethodCode") // Способ оплаты
-                        .append("C_PAY_CONFIRM_CHANNEL", "$.Result.PaymentInfoList[0].ChannelType") // Канал приёма платежа
-                        .append("C_PAY_CONFIRM_SUM", "$.Result.PaymentInfoList[0].Sum")
-                        .append("PRIVATEPAY_CONV_FIO", "$.Result.PaymentInfoList[0].PayerInfo.FIO")
+                        .append("ChannelType", "$.Result.PaymentInfoList[0].ChannelType") // Канал приёма платежа
+                        .append("Sum", "$.Result.PaymentInfoList[0].Sum")
+                        .append("FIO", "$.Result.PaymentInfoList[0].PayerInfo.FIO")
                 , result);
 
         CurrencyDto CURRENCY_RUB = CurrencyDto.builder()
@@ -61,8 +63,8 @@ public class PrepareDataTemplate {
                 .build();
 
         try {
-            result.put("C_PAY_CONFIRM_OPERDATE", Util.timestampToDateFormat(
-                    Util.getTimestamp(result.get("C_PAY_CONFIRM_OPERDATE") + "", "yyyy-MM-dd"),
+            result.put("DocDate", Util.timestampToDateFormat(
+                    Util.getTimestamp(result.get("DocDate") + "", "yyyy-MM-dd"),
                     "dd.MM.yyyy"
             ));
         } catch (Throwable th) {
@@ -70,26 +72,32 @@ public class PrepareDataTemplate {
         }
 
         try {
-            result.put("C_PAY_CONFIRM_PAYDATE", Util.timestampToDateFormat(
-                    Util.getTimestamp(result.get("C_PAY_CONFIRM_PAYDATE") + "", "yyyy-MM-dd'T'HH:mm:ssXXX"),
+            result.put("PaymentDate", Util.timestampToDateFormat(
+                    Util.getTimestamp(result.get("PaymentDate") + "", "yyyy-MM-dd'T'HH:mm:ssXXX"),
                     "dd.MM.yyyy HH:mm"
             ));
         } catch (Throwable th) {
             App.error(th);
         }
 
-        result.put("amountString", FwMoneyUtils.num2str(new BigDecimal(result.get("C_PAY_CONFIRM_SUM") + ""), CURRENCY_RUB));
-        result.put("C_PAY_CONFIRM_SUM", String.format("%.2f", Float.parseFloat(result.get("C_PAY_CONFIRM_SUM") + "")));
+        BigDecimal sum = new BigDecimal(result.get("Sum") + "");
+        BigDecimal fee = new BigDecimal(result.get("SumFee") + "");
+
+        //TODO: надо уточнить какого чёрта
+        result.put("AmountString", FwMoneyUtils.num2str(sum.add(fee), CURRENCY_RUB));
+
+        result.put("Sum", String.format("%.2f", sum.doubleValue()));
+        result.put("SumFee", String.format("%.2f", fee.doubleValue()));
+        result.put("TotalSum", String.format("%.2f", sum.add(fee).doubleValue()));
         result.put("PAYORDER_CONV_RECKPP", "0");
         result.put("C_PAY_CONFIRM_DATE", Util.getDate("dd.MM.yyyy HH:mm"));
         result.put("C_PAY_CONFIRM_PAYMETH_TYPE", mapOper.get(result.get("PayMethodCode")));
         result.put("A_PAYMETH_TXT", mapType.get(result.get("PayMethodCode")));
 
-        // Маскировка
-        //String star = Character.toString((char)0x2217);
+
         String star = "*";
-        result.put("PRIVATEPAY_CONV_FIO", UtilHide.explodeLetterAndMask((String) result.get("PRIVATEPAY_CONV_FIO"), 2,4,30, star).replace(" ", "  "));
-        result.put("C_PAY_CONFIRM_NARRATIVE", UtilHide.explodeLetterAndMask((String) result.get("C_PAY_CONFIRM_NARRATIVE"), 1,4,40, star));
+        result.put("FIO", UtilHide.explodeLetterAndMask((String) result.get("FIO"), 2,4,30, star).replace(" ", "  "));
+        result.put("Nazn", UtilHide.explodeLetterAndMask((String) result.get("Nazn"), 1,4,40, star));
 
         return result;
     }
