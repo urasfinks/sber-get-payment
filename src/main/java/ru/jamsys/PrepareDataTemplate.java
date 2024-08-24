@@ -3,20 +3,20 @@ package ru.jamsys;
 import ru.jamsys.core.App;
 import ru.jamsys.core.extension.builder.HashMapBuilder;
 import ru.jamsys.core.flat.util.Util;
-import ru.jamsys.core.flat.util.UtilFile;
+import ru.jamsys.core.flat.util.UtilFileResource;
 import ru.jamsys.core.flat.util.UtilHide;
 import ru.jamsys.core.flat.util.UtilJson;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class PrepareDataTemplate {
 
     public static void main(String[] args) throws IOException {
-        byte[] bytes = UtilFile.readBytes("security/data.json");
-        System.out.println(UtilJson.toStringPretty(parse(new String(bytes)), "{}"));
+        System.out.println(UtilJson.toStringPretty(parse(UtilFileResource.getAsString("data.json")), "{}"));
     }
 
     public static Map<String, Object> parse(String json) {
@@ -72,6 +72,19 @@ public class PrepareDataTemplate {
         }
 
         try {
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(Util.getTimestamp(result.get("PaymentDate") + "", "yyyy-MM-dd'T'HH:mm:ssXXX") * 1000);
+            String[] monthNames = {"января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"};
+            String month = monthNames[cal.get(Calendar.MONTH)];
+            result.put("PaymentDatePretty",
+                    cal.get(Calendar.DATE)
+                            + " " + month
+                            + " " + cal.get(Calendar.YEAR)
+                            + " " + Util.padLeft(cal.get(Calendar.HOUR_OF_DAY)+"", 2, "0")
+                            + ":" + Util.padLeft(cal.get(Calendar.MINUTE)+"", 2, "0")
+                            + ":" + Util.padLeft(cal.get(Calendar.SECOND)+"", 2, "0") + " мск"
+            );
+
             result.put("PaymentDate", Util.timestampToDateFormat(
                     Util.getTimestamp(result.get("PaymentDate") + "", "yyyy-MM-dd'T'HH:mm:ssXXX"),
                     "dd.MM.yyyy HH:mm"
@@ -98,6 +111,7 @@ public class PrepareDataTemplate {
         String star = "*";
         result.put("FIO", UtilHide.explodeLetterAndMask((String) result.get("FIO"), 2,4,30, star).replace(" ", "  "));
         result.put("Nazn", UtilHide.explodeLetterAndMask((String) result.get("Nazn"), 1,4,40, star));
+
 
         return result;
     }
