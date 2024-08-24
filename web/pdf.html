@@ -1,0 +1,131 @@
+<html lang="ru">
+<head>
+    <META http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>HTML File</title>
+    <style type="text/css">
+        @font-face {
+            font-family: 'Arial';
+        }
+        *{
+            margin: 0px;padding: 0px;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial';
+        }
+
+        @page {
+            margin: 0;
+            padding: 0;
+            size:112.9mm 1393.3mm;
+        }
+        .header{
+            background-image: url("classpath:Image_001.png");
+            background-repeat: no-repeat;
+            background-position: right top;
+            margin-top: 7.8mm;
+            margin-right: 6.9mm;
+        }
+        .footer{
+            background-image: url("classpath:Image_002.png");
+            background-repeat: no-repeat;
+            margin-top: 0mm;
+            margin-left: 11mm;
+            height: 41mm;
+        }
+        table td,
+        table{
+            margin: 0;
+            padding: 0;
+        }
+        .label{
+            font-size: 14pt;
+            letter-spacing: 0.01px;
+            margin-top:3.6mm;
+            color:#808080;
+        }
+        .value{
+            font-size: 16pt;
+            letter-spacing: 0.01px;
+            margin-top:-0.0mm;
+            line-height: 6.6mm;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div style="padding-left:7mm;padding-top:1.5mm;" class="header">
+        <p style="font-weight: bold; font-size: 18pt;letter-spacing: 0.9px;">Чек по операции</p>
+        <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:-1mm;">12 июля 2024 09:49:38 мск</p>
+
+        <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:3.3mm;color:#808080;">Плательщик</p>
+        <p class="value">${FIO}</p>
+
+        <p class="label">Способ оплаты</p>
+        <p class="value">${A_PAYMETH_TXT}</p>
+
+        <p class="label">Услуга</p>
+        <p class="value">${ServiceName}</p>
+
+        <p class="label">СУИП</p>
+        <p class="value">${SUIP}</p>
+    </div>
+    <div class="NAZN" style="padding-left:7mm;">
+        <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:10.0mm;color:#808080;">Адрес</p>
+        <p class="value">Санкт-Петербург, ЖУКОВА УЛ., д.1 СТР. 1, кв.59-Н</p>
+
+        <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:10.0mm;color:#808080;">Наименование для суммы1</p>
+        <p class="value">НО "ФКР МКД СПб" Сумма</p>
+
+        <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:10.0mm;color:#808080;">Наименование для пени1</p>
+        <p class="value">НО "ФКР МКД СПб" Пени</p>
+    </div>
+    <div style="padding-left:7mm;">
+        <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:10.0mm;color:#808080;">Получатель</p>
+        <p class="value">${NameReceiver}</p>
+
+        <table style="margin: 0;padding: 0;">
+            <tr style="width: 50mm;margin: 0;padding: 0;">
+                <td style="width: 47mm;margin: 0;padding: 0;">
+                    <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:3.0mm;color:#808080;margin-left: -0.5mm;">ИНН</p>
+                    <p class="value" style="margin-left: -0.5mm;">${INN}</p>
+                </td>
+                <td style="margin: 0;padding: 0;">
+                    <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:3.0mm;color:#808080;">КПП</p>
+                    <p class="value">*********</p>
+                </td>
+            </tr>
+        </table>
+
+        <p style="font-size: 14pt;letter-spacing: 0.01px;margin-top:3.0mm;color:#808080;">БИК</p>
+        <p class="value">${BIC}</p>
+
+        <p class="label">Расчётный счёт</p>
+        <p class="value">${Account}</p>
+
+        <p class="label">Корр. счёт</p>
+        <p class="value">${BankAcc}</p>
+
+        <p class="label">Тип операции</p>
+        <p class="value">${C_PAY_CONFIRM_PAYMETH_TYPE}</p>
+
+        <p class="label">Код авторизации</p>
+        <p class="value">******</p>
+
+        <p class="label">Сумма платежа</p>
+        <p class="value">${Sum} <span style="font-family: 'ALS Rubl'; font-style: normal;margin-left: -1mm;">p</span></p>
+
+        <p class="label">Комиссия</p>
+        <p class="value">${SumFee} <span style="font-family: 'ALS Rubl'; font-style: normal;margin-left: -1mm;">p</span></p>
+
+        <p class="label">Итого</p>
+        <p class="value">${TotalSum} <span style="font-family: 'ALS Rubl'; font-style: normal;margin-left: -1mm;">p</span></p>
+
+        <p style="font-size: 16pt;letter-spacing: 0.01px;margin-top:2.6mm;line-height: 6.6mm;">${AmountString}</p>
+    </div>
+    <div class="footer"></div>
+</div>
+
+</body>
+</html>
