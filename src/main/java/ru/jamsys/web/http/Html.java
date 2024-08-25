@@ -19,7 +19,7 @@ import java.util.Map;
 
 
 @Component
-@RequestMapping("/html")
+@RequestMapping
 public class Html implements PromiseGenerator, HttpHandler {
 
     @Getter

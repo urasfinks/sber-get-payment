@@ -34,7 +34,7 @@ import java.util.*;
 
 
 @Component
-@RequestMapping("/")
+@RequestMapping("/OldMain")
 public class Main implements PromiseGenerator, HttpHandler {
 
     @Getter
