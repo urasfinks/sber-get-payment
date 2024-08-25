@@ -32,6 +32,13 @@ window.formDataSubmit = function () {
     $$("form-data").submit();
 }
 
+window.openPdf = function(action){
+    var form = $$("pdf");
+    form.action = action;
+    $$("pdf-value").value = JSON.stringify(window.payData);
+    form.submit();
+}
+
 onReady(function () {
     for(var key in window.payData){
         var obj = $$(key);
