@@ -206,7 +206,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("Sum")==null ? "" : $F{detailsMap}.get("Sum")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("TotalSum")==null ? "" : $F{detailsMap}.get("TotalSum")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="301" y="89" width="192" height="49" uuid="f0bd015a-d889-4784-bb18-b87767c3958b">

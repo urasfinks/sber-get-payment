@@ -116,7 +116,7 @@ public class HtmlPdfGenerator {
         PDDocument document = PDDocument.load(new ByteArrayInputStream(pdf));
         //PDDocument document = Loader.loadPDF(pdf);
         PDFRenderer pdfRenderer = new PDFRenderer(document);
-        BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 300, ImageType.RGB);
+        BufferedImage bim = pdfRenderer.renderImageWithDPI(page, 500, ImageType.RGB);
         ImageIO.write(bim, "jpg", outputStream);
         document.close();
         byte[] result = outputStream.toByteArray();
