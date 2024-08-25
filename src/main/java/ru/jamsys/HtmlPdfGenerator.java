@@ -63,10 +63,10 @@ public class HtmlPdfGenerator {
   "Sum" : "100,00",
   "FIO" : "О**ов  А***сей  Т****вич",
   "AmountString" : "СТО РУБЛЕЙ 00 КОПЕЕК",
-  "PAYORDER_CONV_RECKPP" : "0",
-  "C_PAY_CONFIRM_DATE" : "24.08.2024 21:29",
-  "C_PAY_CONFIRM_PAYMETH_TYPE" : "Безналичная оплата услуг",
-  "A_PAYMETH_TXT" : "Карта"
+  "KPP" : "0",
+  "Now" : "24.08.2024 21:29",
+  "PaymentOperation" : "Безналичная оплата услуг",
+  "PaymentType" : "Карта"
 }
         * */
 

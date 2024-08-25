@@ -46,9 +46,7 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
                         promise.setMapRepository("suip", suip);
                     }
 
-                    if (mapEscaped.containsKey("date-iso")) { // С формы приходят данные в iso формате
-                        mapEscaped.put("date", mapEscaped.get("date-iso"));
-                    } else if (mapEscaped.containsKey("date")) { // В QR код зашивается pretty дата
+                    if (mapEscaped.containsKey("date")) { // В QR код зашивается pretty дата
                         promise.setMapRepository("date", Util.timestampToDateFormat(
                                 Util.getTimestamp(mapEscaped.get("date"), "dd.MM.yyyy"),
                                 "yyyy-MM-dd"
@@ -57,8 +55,12 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
                 }).extension(VisualPreview::addHandler);
     }
 
-    public static void addHandler(Promise promise1) {
-        promise1.onComplete((_, promise) -> {
+    public static void addHandler(Promise promiseSource) {
+        addHandler(promiseSource, "upload.html", "upload.html");
+    }
+
+    public static void addHandler(Promise promiseSource, String pathHtmlSuccess, String pathHtmlError) {
+        promiseSource.onComplete((_, promise) -> {
                     HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
                     if (promise.getRepositoryMap("redirect", Boolean.class, false)) {
                         input.getResponse().setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
@@ -67,30 +69,31 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
                     } else if (promise.getRepositoryMap("paymentPrint", Boolean.class, false)) {
                         input.getCompletableFuture().complete(null);
                     } else {
-                        html(promise);
+                        html(promise, pathHtmlSuccess);
                     }
                 })
                 .onError((_, promise) -> {
                     App.error(promise.getException());
                     promise.setMapRepository("error", promise.getException().getMessage());
-                    html(promise);
+                    html(promise, pathHtmlError);
                 });
     }
 
-    public static void html(Promise promise) {
+    public static void html(Promise promise, String pathHtml) {
         HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
         input.setResponseContentType("text/html");
         String suip = promise.getRepositoryMap("error", String.class, "").isEmpty()
                 ? promise.getRepositoryMap("suip", String.class, "")
                 : "";
         input.setBody(TemplateTwix.template(
-                Util.getWebContent("upload.html"),
+                Util.getWebContent(pathHtml),
                 new HashMapBuilder<String, String>()
                         .append("rquid", java.util.UUID.randomUUID().toString())
                         .append("suip", suip)
                         .append("date", promise.getRepositoryMap("date", String.class, Util.getDate("yyyy-MM-dd")))
                         .append("errorShow", promise.getRepositoryMap("error", String.class, "").isEmpty() ? "none" : "table-row")
                         .append("error", promise.getRepositoryMap("error", String.class, ""))
+                        .append("json", promise.getRepositoryMap("json", String.class, "{}"))
         ));
         input.complete();
     }

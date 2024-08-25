@@ -104,17 +104,16 @@ public class PrepareDataTemplate {
         result.put("Sum", String.format("%.2f", sum.doubleValue()));
         result.put("SumFee", String.format("%.2f", fee.doubleValue()));
         result.put("TotalSum", String.format("%.2f", sum.add(fee).doubleValue()));
-        result.put("PAYORDER_CONV_RECKPP", "0");
-        result.put("C_PAY_CONFIRM_DATE", Util.getDate("dd.MM.yyyy HH:mm"));
-        result.put("C_PAY_CONFIRM_PAYMETH_TYPE", mapOper.get(result.get("PayMethodCode")));
-        result.put("A_PAYMETH_TXT", mapType.get(result.get("PayMethodCode")));
+        result.put("KPP", "0");
+        result.put("Now", Util.getDate("dd.MM.yyyy HH:mm"));
+        result.put("PaymentOperation", mapOper.get(result.get("PayMethodCode")));
+        result.put("PaymentType", mapType.get(result.get("PayMethodCode")));
 
-        result.put("NaznParsed", ufoParse((String) result.get("Nazn"), ":", ";"));
+        result.put("Nazn", ufoParse((String) result.get("Nazn"), ":", ";"));
 
         String star = "*";
         result.put("FIO", UtilHide.explodeLetterAndMask((String) result.get("FIO"), 2,4,30, star).replace(" ", "  "));
-
-        result.remove("Nazn");
+        result.remove("PayMethodCode");
 
         return result;
     }

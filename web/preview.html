@@ -1,0 +1,38 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="/css/loader.css" rel="stylesheet"/>
+    <link href="/css/main.css" rel="stylesheet"/>
+</head>
+
+
+<body>
+
+<table class="center tb">
+    <tr style="display: ${errorShow};">
+        <td class="td-round-2">
+            <div id="error" class="m-2"> <a href="/" class="close-btn">&times;</a> ${error}</div>
+        </td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br>&nbsp;</td>
+    </tr>
+    <tr>
+        <td class="td-round">
+            <div class="m" style="margin-top: 0rem;padding-bottom: 1rem;">
+                <div class="label" style="padding:2.3rem 1rem;">Поиск платежа (ифт)</div>
+            </div>
+            <textarea>${json}</textarea>
+        </td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br>&nbsp;</td>
+    </tr>
+</table>
+
+
+<script type="text/javascript" src="/js/on-ready.js"></script>
+<!--<script type="text/javascript" src="/js/main.js"></script>-->
+</body>
+</html>

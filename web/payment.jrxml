@@ -132,7 +132,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("C_PAY_CONFIRM_DATE")==null ? "" : $F{detailsMap}.get("C_PAY_CONFIRM_DATE")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("Now")==null ? "" : $F{detailsMap}.get("Now")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="60" width="100" height="14" forecolor="#808080" uuid="563910ba-1c37-4952-9136-16d5cc4d7d41">
@@ -179,7 +179,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("A_PAYMETH_TXT")==null ? "" : $F{detailsMap}.get("A_PAYMETH_TXT")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("PaymentType")==null ? "" : $F{detailsMap}.get("PaymentType")]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="0" y="167" width="249" height="14" uuid="e4d8160f-8a3f-489a-9087-33a0479c97c1">
@@ -188,7 +188,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("C_PAY_CONFIRM_PAYMETH_TYPE")==null ? "" : $F{detailsMap}.get("C_PAY_CONFIRM_PAYMETH_TYPE")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("PaymentOperation")==null ? "" : $F{detailsMap}.get("PaymentOperation")]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="301" y="60" width="100" height="14" forecolor="#808080" uuid="b80880ee-b54a-4bec-a17a-c68244fc67c7">
@@ -290,7 +290,7 @@
 				<textElement>
 					<font fontName="PT Sans"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{detailsMap}.get("PAYORDER_CONV_RECKPP")==null ? "" : $F{detailsMap}.get("PAYORDER_CONV_RECKPP")]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{detailsMap}.get("KPP")==null ? "" : $F{detailsMap}.get("KPP")]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="0" y="319" width="497" height="1" forecolor="#808080" uuid="118f1c8b-f019-4df3-af2b-f7117d131f5d"/>
