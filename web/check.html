@@ -1,0 +1,38 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link href="/css/loader.css" rel="stylesheet"/>
+    <link href="/css/main.css" rel="stylesheet"/>
+</head>
+
+<body>
+
+<table class="center tb check-img">
+    <tr>
+        <td>&nbsp;<br>&nbsp;</td>
+    </tr>
+    <tr>
+        <td class="td-round">
+            <div class="m" style="margin-top: 0rem;padding-bottom: 1rem;">
+                <a href="/" class="label" style="padding:2.3rem 1rem;display:block;text-decoration: none;">Поиск платежа (ифт)</a>
+            </div>
+            <div class="${errorShow}">
+                <div id="error" class="m-2"><a href="/" class="close-btn">&times;</a> ${error}</div>
+            </div>
+
+            <div id="info">
+                <img class="fit-img" src="${json}">
+            </div>
+
+        </td>
+    </tr>
+    <tr>
+        <td>&nbsp;<br>&nbsp;</td>
+    </tr>
+</table>
+
+<script type="text/javascript" src="/js/on-ready.js"></script>
+
+</body>
+</html>

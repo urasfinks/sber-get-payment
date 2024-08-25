@@ -9,6 +9,17 @@ body {
     background: linear-gradient(254.93deg, rgb(175, 178, 36) 9.3%, rgb(21, 180, 129) 48.25%, rgb(0, 182, 222) 90.35%);
 
 }
+.check-img{
+    width: 500px;
+}
+
+.fit-img{
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    min-height: 100%;
+}
+
 input{
     width: 100%;
 }
@@ -57,7 +68,7 @@ form{
 .tb{
     border-collapse: separate;
     border-spacing: 0px;
-    
+
 }
 
 /*.td-round-2:hover,*/
@@ -426,6 +437,10 @@ input[type='date'], input[type='time'] {
 
 /* tablet */
 @media all and (max-width: 1024px) {
+
+    .check-img{
+        width: 90%;
+    }
 
     * {
         font-size: 1.7rem;
