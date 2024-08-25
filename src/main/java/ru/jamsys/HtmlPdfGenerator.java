@@ -81,7 +81,7 @@ public class HtmlPdfGenerator {
         Map<String, String> sMap = new LinkedHashMap<>();
         data.forEach((key, value) -> sMap.put(key, value.toString()));
 
-        sMap.put("AmountString", sMap.get("AmountString").substring(0, 1).toUpperCase() + sMap.get("AmountString").substring(1).toLowerCase());
+
 
         html = TemplateTwix.template(html, sMap);
 

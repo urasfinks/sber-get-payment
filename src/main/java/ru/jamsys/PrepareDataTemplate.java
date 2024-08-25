@@ -98,7 +98,8 @@ public class PrepareDataTemplate {
         BigDecimal fee = new BigDecimal(result.get("SumFee") + "");
 
         //TODO: надо уточнить какого чёрта
-        result.put("AmountString", FwMoneyUtils.num2str(sum.add(fee), CURRENCY_RUB));
+        String s = FwMoneyUtils.num2str(sum.add(fee), CURRENCY_RUB);
+        result.put("AmountString", s.substring(0, 1).toUpperCase() + s.substring(1).toLowerCase());
 
         result.put("Sum", String.format("%.2f", sum.doubleValue()));
         result.put("SumFee", String.format("%.2f", fee.doubleValue()));
@@ -112,7 +113,8 @@ public class PrepareDataTemplate {
 
         String star = "*";
         result.put("FIO", UtilHide.explodeLetterAndMask((String) result.get("FIO"), 2,4,30, star).replace(" ", "  "));
-        result.put("Nazn", UtilHide.explodeLetterAndMask((String) result.get("Nazn"), 1,4,40, star));
+
+        result.remove("Nazn");
 
         return result;
     }
