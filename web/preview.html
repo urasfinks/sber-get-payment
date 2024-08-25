@@ -4,69 +4,74 @@
     <link rel="shortcut icon" href="/favicon.ico">
     <link href="/css/loader.css" rel="stylesheet"/>
     <link href="/css/main.css" rel="stylesheet"/>
+    <link href="/css/main-2.css" rel="stylesheet"/>
 </head>
 
 
 <body>
 
 <table class="center tb">
-    <tr style="display: ${errorShow};">
-        <td class="td-round-2">
-            <div id="error" class="m-2"><a href="/" class="close-btn">&times;</a> ${error}</div>
-        </td>
-    </tr>
     <tr>
         <td>&nbsp;<br>&nbsp;</td>
     </tr>
     <tr>
         <td class="td-round">
             <div class="m" style="margin-top: 0rem;padding-bottom: 1rem;">
-                <div class="label" style="padding:2.3rem 1rem;">Поиск платежа (ифт)</div>
+                <a href="/" class="label" style="padding:2.3rem 1rem;display:block;text-decoration: none;">Поиск платежа (ифт)</a>
             </div>
-            <div class="op-border"></div>
-            <div class="center-w label-1" style="margin-top: 4em;">
-                <span id="TotalSum"></span>
-                <span style="font-weight: bold;">&#8381;</span>
+            <div class="${errorShow}">
+                <div id="error" class="m-2"><a href="/" class="close-btn">&times;</a> ${error}</div>
             </div>
-            <div class="center-w label-2" id="ServiceName"></div>
 
-
-            <table class="btn-check" onclick="window.openPdf('/CheckPdf')">
-                <tr>
-                    <td width="1%">
-                        <div class="icon-check"></div>
-                    </td>
-                    <td class="btn-title" width="70%">Чек по операции</td>
-                </tr>
-            </table>
-
-            <table class="btn-ref" onclick="window.openPdf('/RefPdf')">
-                <tr>
-                    <td width="1%">
-                        <div class="icon-ref"></div>
-                    </td>
-                    <td class="btn-title" width="70%">Справка о выполнении</td>
-                </tr>
-            </table>
-
-            <div class="detail">
-                <div style="margin-bottom:1rem">Подробности</div>
-                <div class="req-block">
-                    <small class="small-info">Номер документа</small>
-                    <div id="SUIP"></div>
+            <div id="info" style="display: none;">
+                <div class="op-border"></div>
+                <div class="center-w label-1" style="margin-top: 4em;">
+                    <span id="TotalSum"></span>
+                    <span style="font-weight: bold;">&#8381;</span>
                 </div>
-                <div class="req-block">
-                    <small class="small-info">Дата документа</small>
-                    <div id="PaymentDate"></div>
+                <div class="center-w label-2" style="margin:0rem 1rem;" id="ServiceName"></div>
+
+                <div style="margin:4rem 2rem;">
+                    <table class="btn-check" onclick="window.openPdf('/CheckPdf')">
+                        <tr>
+                            <td width="1%">
+                                <div class="icon-check"></div>
+                            </td>
+                            <td class="btn-title" width="70%">Чек по операции</td>
+                        </tr>
+                    </table>
+                    <span>&nbsp;&nbsp;</span>
+                    <table class="btn-ref" onclick="window.openPdf('/RefPdf')">
+                        <tr>
+                            <td width="1%">
+                                <div class="icon-ref"></div>
+                            </td>
+                            <td class="btn-title" width="70%">Справка о выполнении</td>
+                        </tr>
+                    </table>
                 </div>
-                <div class="req-block" style="border-bottom: 0px;">
-                    <small class="small-info">ФИО</small>
-                    <div id="FIO"></div>
+
+
+                <div class="detail">
+                    <div style="margin-bottom:1rem">Подробности</div>
+                    <div class="req-block">
+                        <div class="small-info">Номер документа</div>
+                        <div id="SUIP"></div>
+                    </div>
+                    <div class="req-block">
+                        <div class="small-info">Дата документа</div>
+                        <div id="PaymentDate"></div>
+                    </div>
+                    <div class="req-block" style="border-bottom: 0px;">
+                        <div class="small-info">ФИО</div>
+                        <div id="FIO"></div>
+                    </div>
                 </div>
+                <form id="pdf" method="post" action="" style="display: none;">
+                    <input type="text" name="json" id="pdf-value">
+                </form>
             </div>
-            <form id="pdf" method="post" action="" style="display: none;">
-                <input type="text" name="json" id="pdf-value">
-            </form>
+
         </td>
     </tr>
     <tr>

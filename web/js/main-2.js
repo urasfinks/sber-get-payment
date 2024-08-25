@@ -39,7 +39,21 @@ window.openPdf = function(action){
     form.submit();
 }
 
+function isEmpty(obj) {
+    for (const prop in obj) {
+        if (Object.hasOwn(obj, prop)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 onReady(function () {
+    if(window.payData == undefined || window.payData == null || isEmpty(window.payData)){
+        return;
+    }
+    $$("info").style.display="block";
     for(var key in window.payData){
         var obj = $$(key);
         if(obj != undefined && obj != null){

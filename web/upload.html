@@ -21,16 +21,16 @@
     <tr>
         <td class="td-round">
             <div class="m" style="margin-top: 0rem;padding-bottom: 1rem;">
-                <div class="label" style="padding:2.3rem 1rem;">Поиск платежа (ифт)</div>
+                <a href="/" class="label" style="padding:2.3rem 1rem;display:block;text-decoration: none;">Поиск платежа (ифт)</a>
             </div>
             <form action="/Preview" method="post" id="form-data" autocomplete="off">
                 <div class="m">
                     <input name="suip" id="suip" autocomplete="off" type="text" class="input-text border-gradient" placeholder="СУИП" value="${suip}">
                 </div>
                 <div class="m">
-                    <table>
+                    <table style="width: 100%;">
                         <tr>
-                            <td>
+                            <td width="98%">
                                 <input name="date-iso" id="date-iso" autocomplete="off" type="date" style="font-family:inherit;" value="${date}" class="input-text border-gradient" placeholder="Дата">
                             </td>
                             <td width="1%">&nbsp;&nbsp;</td>

@@ -64,6 +64,9 @@ public class Preview implements PromiseGenerator, HttpHandler {
                     promise.setMapRepository("date", mapEscaped.get("date-iso"));
                 })
                 .then("getJson", (atomicBoolean, promise) -> {
+                    if(!promise.getRepositoryMap("error", String.class, "").isEmpty()){
+                        return;
+                    }
                     Map<String, Object> parse = PrepareDataTemplate.parse(
                             UtilFileResource.getAsString("data.json")
                     );
