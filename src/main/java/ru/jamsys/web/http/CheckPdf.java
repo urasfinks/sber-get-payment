@@ -35,7 +35,7 @@ public class CheckPdf implements PromiseGenerator, HttpHandler {
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
                 .then("init", (_, promise) -> {
-                    ServletHandler servletHandler = promise.getRepositoryMap(ServletHandler.class);
+                    ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
                     Map<String, String> maps = servletHandler.getRequestReader().getMap();
                     if (!maps.containsKey("json")) {
                         promise.setRepositoryMap("error", "Пустая форма");

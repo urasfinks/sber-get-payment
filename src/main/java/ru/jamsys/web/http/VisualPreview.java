@@ -35,7 +35,7 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
                 .then("init", (_, promise) -> {
-                    ServletHandler input = promise.getRepositoryMap(ServletHandler.class);
+                    ServletHandler input = promise.getRepositoryMapClass(ServletHandler.class);
                     Map<String, String> mapEscaped = input.getRequestReader().getMapEscapedHtmlSpecialChars();
                     if (mapEscaped.containsKey("suip")) {
                         String suip = mapEscaped.get("suip");
@@ -61,7 +61,7 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
 
     public static void addHandler(Promise promiseSource, String pathHtmlSuccess, String pathHtmlError) {
         promiseSource.onComplete((_, promise) -> {
-                    ServletHandler input = promise.getRepositoryMap(ServletHandler.class);
+                    ServletHandler input = promise.getRepositoryMapClass(ServletHandler.class);
                     if (promise.getRepositoryMap("redirect", Boolean.class, false)) {
                         input.getResponse().setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
                         input.getResponse().setHeader("Location", promise.getRepositoryMap("uri", String.class));
@@ -80,7 +80,7 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
     }
 
     public static void html(Promise promise, String pathHtml) {
-        ServletHandler input = promise.getRepositoryMap(ServletHandler.class);
+        ServletHandler input = promise.getRepositoryMapClass(ServletHandler.class);
         input.setResponseContentType("text/html");
         String suip = promise.getRepositoryMap("error", String.class, "").isEmpty()
                 ? promise.getRepositoryMap("suip", String.class, "")

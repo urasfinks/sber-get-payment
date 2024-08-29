@@ -33,7 +33,7 @@ public class Preview implements PromiseGenerator, HttpHandler {
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
                 .then("init", (_, promise) -> {
-                    ServletHandler servletHandler = promise.getRepositoryMap(ServletHandler.class);
+                    ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
                     Map<String, String> mapEscaped = servletHandler.getRequestReader().getMapEscapedHtmlSpecialChars();
 
                     if (!mapEscaped.containsKey("suip")) {

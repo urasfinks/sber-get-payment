@@ -36,7 +36,7 @@ public class Html implements PromiseGenerator, HttpHandler {
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
                 .then("init", (_, promise) -> {
-                    ServletHandler servletHandler = promise.getRepositoryMap(ServletHandler.class);
+                    ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
 
                     Map<String, Object> parse = PrepareDataTemplate.parse(
                             UtilFileResource.getAsString("data.json")
@@ -63,11 +63,11 @@ public class Html implements PromiseGenerator, HttpHandler {
                     ));
                 })
                 .onComplete((_, promise) -> {
-                    ServletHandler servletHandler = promise.getRepositoryMap(ServletHandler.class);
+                    ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
                     servletHandler.getCompletableFuture().complete(null);
                 })
                 .onError((_, promise) -> {
-                    ServletHandler input = promise.getRepositoryMap(ServletHandler.class);
+                    ServletHandler input = promise.getRepositoryMapClass(ServletHandler.class);
                     App.error(promise.getException());
                     input.responseComplete();
                 });

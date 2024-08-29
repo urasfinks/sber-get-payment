@@ -35,7 +35,7 @@ public class Qr implements PromiseGenerator, HttpHandler {
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
                 .then("init", (_, promise) -> {
-                    ServletHandler servletHandler = promise.getRepositoryMap(ServletHandler.class);
+                    ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
                     InputStream file = servletHandler.getRequestReader().getMultiPartFormData("file");
                     String s = QRReader.readQRCode(file);
                     if (s == null) {
