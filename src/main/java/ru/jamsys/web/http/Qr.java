@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.jamsys.QRReader;
 import ru.jamsys.core.component.ServicePromise;
-import ru.jamsys.core.extension.http.HttpAsyncResponse;
+import ru.jamsys.core.extension.http.ServletHandler;
 import ru.jamsys.core.flat.util.JsonEnvelope;
 import ru.jamsys.core.flat.util.Util;
 import ru.jamsys.core.flat.util.UtilJson;
@@ -35,18 +35,18 @@ public class Qr implements PromiseGenerator, HttpHandler {
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
                 .then("init", (_, promise) -> {
-                    HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
-                    InputStream file = input.getHttpRequestReader().getMultiPartFormData("file");
+                    ServletHandler servletHandler = promise.getRepositoryMap(ServletHandler.class);
+                    InputStream file = servletHandler.getRequestReader().getMultiPartFormData("file");
                     String s = QRReader.readQRCode(file);
                     if (s == null) {
-                        promise.setMapRepository("error", "QR не распознан");
+                        promise.setRepositoryMap("error", "QR не распознан");
                     } else if (s.startsWith("{")) {
                         parseQr(s, promise);
                     } else if (s.startsWith("http://") || s.startsWith("https://")) {
-                        promise.setMapRepository("uri", "/" + s.substring(s.indexOf("?")));
-                        promise.setMapRepository("redirect", true);
+                        promise.setRepositoryMap("uri", "/" + s.substring(s.indexOf("?")));
+                        promise.setRepositoryMap("redirect", true);
                     } else {
-                        promise.setMapRepository("error", "Не корректный QR");
+                        promise.setRepositoryMap("error", "Не корректный QR");
                     }
                 }).extension(VisualPreview::addHandler);
     }
@@ -54,24 +54,24 @@ public class Qr implements PromiseGenerator, HttpHandler {
     public static void parseQr(String s, Promise promise) {
         JsonEnvelope<Map<Object, Object>> map = UtilJson.toMap(s);
         if (map.getException() != null) {
-            promise.setMapRepository("error", "При обработке QR возникли ошибки");
+            promise.setRepositoryMap("error", "При обработке QR возникли ошибки");
             return;
         }
         Map<Object, Object> object = map.getObject();
         if (!object.containsKey("suip")) {
-            promise.setMapRepository("error", "QR не содержит СУИП");
+            promise.setRepositoryMap("error", "QR не содержит СУИП");
             return;
         }
         if (!object.containsKey("date")) {
-            promise.setMapRepository("error", "QR не содержит даты");
+            promise.setRepositoryMap("error", "QR не содержит даты");
             return;
         }
 
         String suip = Util.htmlEntity((String) object.get("suip"));
         String date = Util.htmlEntity((String) object.get("date"));
 
-        promise.setMapRepository("uri", "/?suip=" + suip + "&date=" + date);
-        promise.setMapRepository("redirect", true);
+        promise.setRepositoryMap("uri", "/?suip=" + suip + "&date=" + date);
+        promise.setRepositoryMap("redirect", true);
     }
 
 }

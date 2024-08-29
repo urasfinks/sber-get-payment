@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import ru.jamsys.core.App;
 import ru.jamsys.core.component.ServicePromise;
 import ru.jamsys.core.extension.builder.HashMapBuilder;
-import ru.jamsys.core.extension.http.HttpAsyncResponse;
+import ru.jamsys.core.extension.http.ServletHandler;
 import ru.jamsys.core.flat.template.twix.TemplateTwix;
 import ru.jamsys.core.flat.util.Util;
 import ru.jamsys.core.promise.Promise;
@@ -35,19 +35,19 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
                 .then("init", (_, promise) -> {
-                    HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
-                    Map<String, String> mapEscaped = input.getHttpRequestReader().getMapEscapedHtmlSpecialChars();
+                    ServletHandler input = promise.getRepositoryMap(ServletHandler.class);
+                    Map<String, String> mapEscaped = input.getRequestReader().getMapEscapedHtmlSpecialChars();
                     if (mapEscaped.containsKey("suip")) {
                         String suip = mapEscaped.get("suip");
                         if (suip == null || suip.isEmpty()) {
-                            promise.setMapRepository("error", "СУИП пустой");
+                            promise.setRepositoryMap("error", "СУИП пустой");
                             return;
                         }
-                        promise.setMapRepository("suip", suip);
+                        promise.setRepositoryMap("suip", suip);
                     }
 
                     if (mapEscaped.containsKey("date")) { // В QR код зашивается pretty дата
-                        promise.setMapRepository("date", Util.timestampToDateFormat(
+                        promise.setRepositoryMap("date", Util.timestampToDateFormat(
                                 Util.getTimestamp(mapEscaped.get("date"), "dd.MM.yyyy"),
                                 "yyyy-MM-dd"
                         ));
@@ -61,7 +61,7 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
 
     public static void addHandler(Promise promiseSource, String pathHtmlSuccess, String pathHtmlError) {
         promiseSource.onComplete((_, promise) -> {
-                    HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
+                    ServletHandler input = promise.getRepositoryMap(ServletHandler.class);
                     if (promise.getRepositoryMap("redirect", Boolean.class, false)) {
                         input.getResponse().setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
                         input.getResponse().setHeader("Location", promise.getRepositoryMap("uri", String.class));
@@ -74,18 +74,18 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
                 })
                 .onError((_, promise) -> {
                     App.error(promise.getException());
-                    promise.setMapRepository("error", promise.getException().getMessage());
+                    promise.setRepositoryMap("error", promise.getException().getMessage());
                     html(promise, pathHtmlError);
                 });
     }
 
     public static void html(Promise promise, String pathHtml) {
-        HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
+        ServletHandler input = promise.getRepositoryMap(ServletHandler.class);
         input.setResponseContentType("text/html");
         String suip = promise.getRepositoryMap("error", String.class, "").isEmpty()
                 ? promise.getRepositoryMap("suip", String.class, "")
                 : "";
-        input.setBody(TemplateTwix.template(
+        input.setResponseBody(TemplateTwix.template(
                 Util.getWebContent(pathHtml),
                 new HashMapBuilder<String, String>()
                         .append("rquid", java.util.UUID.randomUUID().toString())
@@ -95,7 +95,7 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
                         .append("error", promise.getRepositoryMap("error", String.class, ""))
                         .append("json", promise.getRepositoryMap("json", String.class, "{}"))
         ));
-        input.complete();
+        input.responseComplete();
     }
 
 }

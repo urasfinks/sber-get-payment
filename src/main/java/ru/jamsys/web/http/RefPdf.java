@@ -10,15 +10,11 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.jamsys.DataContainer;
-import ru.jamsys.HtmlPdfGenerator;
-import ru.jamsys.PrepareDataTemplate;
 import ru.jamsys.core.App;
 import ru.jamsys.core.component.ServicePromise;
 import ru.jamsys.core.component.ServiceProperty;
-import ru.jamsys.core.extension.http.HttpAsyncResponse;
+import ru.jamsys.core.extension.http.ServletHandler;
 import ru.jamsys.core.flat.util.JsonEnvelope;
-import ru.jamsys.core.flat.util.Util;
-import ru.jamsys.core.flat.util.UtilFileResource;
 import ru.jamsys.core.flat.util.UtilJson;
 import ru.jamsys.core.promise.Promise;
 import ru.jamsys.core.promise.PromiseGenerator;
@@ -50,23 +46,21 @@ public class RefPdf implements PromiseGenerator, HttpHandler {
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
                 .then("init", (_, promise) -> {
-                    HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
-                    Map<String, String> maps = input.getHttpRequestReader().getMap();
+                    ServletHandler servletHandler = promise.getRepositoryMap(ServletHandler.class);
+                    Map<String, String> maps = servletHandler.getRequestReader().getMap();
                     if (!maps.containsKey("json")) {
-                        promise.setMapRepository("error", "Пустая форма");
+                        promise.setRepositoryMap("error", "Пустая форма");
                         return;
                     }
                     JsonEnvelope<Map<Object, Object>> jsonEnvelope = UtilJson.toMap(maps.get("json"));
                     if (jsonEnvelope.getException() != null) {
-                        promise.setMapRepository("error", "При обработке QR возникли ошибки");
+                        promise.setRepositoryMap("error", "При обработке QR возникли ошибки");
                         return;
                     }
 
                     Map<Object, Object> object = jsonEnvelope.getObject();
                     Map<String, Object> parse = new HashMap<>();
-                    object.forEach((o, o2) -> {
-                        parse.put((String) o, o2);
-                    });
+                    object.forEach((o, o2) -> parse.put((String) o, o2));
 
                     @SuppressWarnings("unchecked")
                     Map<String, String> naznParsed = (Map<String, String>) parse.get("Nazn");
@@ -89,14 +83,13 @@ public class RefPdf implements PromiseGenerator, HttpHandler {
                     JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<>(), beanColDataSource);
 
                     BufferedImage image = (BufferedImage) JasperPrintManager.printPageToImage(jasperPrint, 0, 5f);
-                    HttpServletResponse response = input.getResponse();
+                    HttpServletResponse response = servletHandler.getResponse();
                     ImageIO.write(image, "jpg", response.getOutputStream());
 
 
-                    promise.setMapRepository("paymentPrint", true);
+                    promise.setRepositoryMap("paymentPrint", true);
                 })
                 .extension(promise -> VisualPreview.addHandler(promise, "upload.html", "upload.html"));
     }
-
 
 }

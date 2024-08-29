@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.jamsys.HtmlPdfGenerator;
 import ru.jamsys.core.component.ServicePromise;
-import ru.jamsys.core.extension.http.HttpAsyncResponse;
+import ru.jamsys.core.extension.http.ServletHandler;
 import ru.jamsys.core.flat.util.JsonEnvelope;
 import ru.jamsys.core.flat.util.Util;
 import ru.jamsys.core.flat.util.UtilJson;
@@ -35,38 +35,39 @@ public class CheckPdf implements PromiseGenerator, HttpHandler {
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
                 .then("init", (_, promise) -> {
-                    HttpAsyncResponse input = promise.getRepositoryMap("HttpAsyncResponse", HttpAsyncResponse.class);
-                    Map<String, String> maps = input.getHttpRequestReader().getMap();
+                    ServletHandler servletHandler = promise.getRepositoryMap(ServletHandler.class);
+                    Map<String, String> maps = servletHandler.getRequestReader().getMap();
                     if (!maps.containsKey("json")) {
-                        promise.setMapRepository("error", "Пустая форма");
+                        promise.setRepositoryMap("error", "Пустая форма");
                         return;
                     }
                     JsonEnvelope<Map<Object, Object>> jsonEnvelope = UtilJson.toMap(maps.get("json"));
                     if (jsonEnvelope.getException() != null) {
-                        promise.setMapRepository("error", "При обработке QR возникли ошибки");
+                        promise.setRepositoryMap("error", "При обработке QR возникли ошибки");
                         return;
                     }
 
                     Map<Object, Object> object = jsonEnvelope.getObject();
                     Map<String, Object> parse = new HashMap<>();
-                    object.forEach((o, o2) -> {
-                        parse.put((String) o, o2);
-                    });
+                    object.forEach((o, o2) -> parse.put((String) o, o2));
 
                     @SuppressWarnings("unchecked")
                     Map<String, String> naznParsed = (Map<String, String>) parse.get("Nazn");
 
                     StringBuilder sb = new StringBuilder();
-                    naznParsed.forEach((key, value) -> {
-                        sb.append("<p class=\"nazn-label\">" + Util.htmlEntity(key) + "</p>\n" +
-                                "<p class=\"value\">" + Util.htmlEntity(value) + "</p>");
-                    });
+                    naznParsed.forEach((key, value) -> sb
+                            .append("<p class=\"nazn-label\">")
+                            .append(Util.htmlEntity(key)).append("</p>\n")
+                            .append("<p class=\"value\">")
+                            .append(Util.htmlEntity(value))
+                            .append("</p>")
+                    );
                     parse.put("naznRender", sb.toString());
-                    input.getResponse().getOutputStream().write(HtmlPdfGenerator.convert(
+                    servletHandler.getResponse().getOutputStream().write(HtmlPdfGenerator.convert(
                             HtmlPdfGenerator.pdf("pdf.html", parse),
                             0
                     ));
-                    promise.setMapRepository("paymentPrint", true);
+                    promise.setRepositoryMap("paymentPrint", true);
                 })
                 .extension(promise -> VisualPreview.addHandler(promise, "upload.html", "upload.html"));
     }

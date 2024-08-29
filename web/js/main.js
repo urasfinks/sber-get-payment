@@ -40,8 +40,8 @@ document.getElementById("form-data").onkeydown = function (evt) {
 };
 
 onReady(function () {
+    var suip = $$("suip").value;
     setTimeout(function () {
-        var suip = $$("suip").value;
         if (suip != undefined && suip.trim() !== "") {
             window.formDataSubmit();
         }
