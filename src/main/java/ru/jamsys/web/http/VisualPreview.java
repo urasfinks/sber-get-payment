@@ -73,8 +73,14 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
                     }
                 })
                 .onError((_, promise) -> {
+                    String message = promise.getException().getMessage();
+                    if (message == null || message.isEmpty()) {
+                        promise.setRepositoryMap("error", "Не предвиденная ошибка");
+                    } else {
+                        promise.setRepositoryMap("error", promise.getException().getMessage());
+                    }
                     App.error(promise.getException());
-                    promise.setRepositoryMap("error", promise.getException().getMessage());
+
                     html(promise, pathHtmlError);
                 });
     }
