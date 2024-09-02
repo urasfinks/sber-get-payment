@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.jamsys.core.component.ServicePromise;
 import ru.jamsys.core.extension.http.ServletHandler;
+import ru.jamsys.core.flat.util.UtilFileResource;
 import ru.jamsys.core.promise.Promise;
 import ru.jamsys.core.promise.PromiseGenerator;
 import ru.jamsys.core.web.http.HttpHandler;
@@ -29,7 +30,7 @@ public class Mirror implements PromiseGenerator, HttpHandler {
         return servicePromise.get(index, 7_000L)
                 .then("init", (_, promise) -> {
                     ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
-                    servletHandler.setResponseBody("");
+                    servletHandler.setResponseBody(UtilFileResource.getAsString("data2.json"));
                 }).onComplete((_, promise) -> {
                     ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
                     servletHandler.responseComplete();

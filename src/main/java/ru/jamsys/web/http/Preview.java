@@ -36,7 +36,7 @@ public class Preview implements PromiseGenerator, HttpHandler {
 
     private final ServicePromise servicePromise;
 
-    private ManagerVirtualFileSystem managerVirtualFileSystem;
+    private final ManagerVirtualFileSystem managerVirtualFileSystem;
 
     private final String jksVirtualPath = "/hybrid.jks";
 
@@ -125,7 +125,7 @@ public class Preview implements PromiseGenerator, HttpHandler {
                             "  }\n" +
                             "}";
                     client.setPostData(postData.getBytes(StandardCharsets.UTF_8));
-                    System.out.println("Rquid: " + rquid + "; Request: " + postData);
+                    System.out.println("Rquid: " + rquid + "; url: " + client.getUrl() + " Request: " + postData);
                     HttpResponse execute = httpResource.execute(client);
                     String body = execute.getBody();
                     if (body == null || body.isEmpty()) {
@@ -139,17 +139,6 @@ public class Preview implements PromiseGenerator, HttpHandler {
                     String ret = UtilJson.toStringPretty(parse, "{}");
                     promise.setRepositoryMap("json", ret);
                 })
-
-//                .then("getJson", (_, promise) -> {
-//                    if(!promise.getRepositoryMap("error", String.class, "").isEmpty()){
-//                        return;
-//                    }
-//                    Map<String, Object> parse = PrepareDataTemplate.parse(
-//                            UtilFileResource.getAsString("data2.json")
-//                    );
-//                    promise.setRepositoryMap("json", UtilJson.toStringPretty(parse, "{}"));
-//                })
-
                 .extension(promise -> VisualPreview.addHandler(promise, "preview.html", "upload.html"));
     }
 
