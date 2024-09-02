@@ -128,16 +128,15 @@ public class Preview implements PromiseGenerator, HttpHandler {
                     System.out.println("Rquid: " + rquid + "; Request: " + postData);
                     HttpResponse execute = httpResource.execute(client);
                     String body = execute.getBody();
-                    //System.out.println("Response: " + body);
                     if (body == null || body.isEmpty()) {
                         throw new RuntimeException("Нет ответа от сервиса");
                     }
+                    System.out.println(UtilBase64.base64Encode(body, true));
                     if (!body.contains("SUIP") || !body.contains("PayeeInfo")) {
                         throw new RuntimeException("Не найдено");
                     }
                     Map<String, Object> parse = PrepareDataTemplate.parse(body);
                     String ret = UtilJson.toStringPretty(parse, "{}");
-                    System.out.println(UtilBase64.base64Encode(ret, true));
                     promise.setRepositoryMap("json", ret);
                 })
 
