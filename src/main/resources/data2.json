@@ -1,0 +1,41 @@
+{
+  "Status": 0,
+  "Description": "Успех",
+  "Result": {
+    "RqTm": "2023-08-24T10:22:16+03:00",
+    "spname": "PAYMENT_PRO",
+    "SetValue": 500,
+    "PaymentInfoList": [
+      {
+        "PaymentID": "12476685376",
+        "SUIP": "100776399550ZNSW",
+        "OperUID": "1e0d16a498f349d2a1f6d16d77723a75",
+        "PaymentDate": "2024-08-13T10:59:38+03:00",
+        "PaymentStatus": 1,
+        "PaymentStatusFront": "В обработке",
+        "PaymentStatusNum": "1.2.2",
+        "PayerInfo": {
+          "DPAN": "2202209F0C5E1544",
+          "EPKIDFL": "1959812973303113290"
+        },
+        "PayeeInfo": {
+          "PaymentDescr": "ФОНД ОБЛИГАЦИЙ ИЛЬЯ МУРОМЕЦ",
+          "NameReceiver": "АО УК \"ПЕРВАЯ\"",
+          "INN": "7710183778",
+          "KPP": "997950001",
+          "Account": "40701810938170000288",
+          "BankInfo": {
+            "BIC": "044525225"
+          }
+        },
+        "TotalSum": "15001",
+        "Sum": "15001",
+        "SumFee": "0",
+        "Narrative": "PERSACC: 13/7836678/19076; FIO: ТЕСТИНВЕСТИЦИОННЫЙ ПИФ СОРОКВОСЕМЬЕВИЧ; ADDRESS: 13.08.2024; PURPOSE: CC00; EXCLUDE_REQS: EXCLUDE_REQS@INSURANCE_PASS_RF@;",
+        "PayMethodCode": 2,
+        "ChannelType": "ВСП",
+        "SumCur": "RUR"
+      }
+    ]
+  }
+}

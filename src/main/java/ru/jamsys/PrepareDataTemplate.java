@@ -52,7 +52,8 @@ public class PrepareDataTemplate {
                         .append("ChannelType", "$.Result.PaymentInfoList[0].ChannelType") // Канал приёма платежа
                         .append("Sum", "$.Result.PaymentInfoList[0].Sum")
                         .append("FIO", "$.Result.PaymentInfoList[0].PayerInfo.FIO")
-                , result);
+                , result
+                , "***");
 
         CurrencyDto CURRENCY_RUB = CurrencyDto.builder()
                 .name1("РУБЛЬ")

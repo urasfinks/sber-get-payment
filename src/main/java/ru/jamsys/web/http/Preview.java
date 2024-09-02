@@ -140,6 +140,17 @@ public class Preview implements PromiseGenerator, HttpHandler {
                     System.out.println(UtilBase64.base64Encode(ret, true));
                     promise.setRepositoryMap("json", ret);
                 })
+
+//                .then("getJson", (_, promise) -> {
+//                    if(!promise.getRepositoryMap("error", String.class, "").isEmpty()){
+//                        return;
+//                    }
+//                    Map<String, Object> parse = PrepareDataTemplate.parse(
+//                            UtilFileResource.getAsString("data2.json")
+//                    );
+//                    promise.setRepositoryMap("json", UtilJson.toStringPretty(parse, "{}"));
+//                })
+
                 .extension(promise -> VisualPreview.addHandler(promise, "preview.html", "upload.html"));
     }
 
