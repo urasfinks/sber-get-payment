@@ -51,7 +51,11 @@ public class Preview implements PromiseGenerator, HttpHandler {
     ) {
         this.servicePromise = servicePromise;
         this.managerVirtualFileSystem = managerVirtualFileSystem;
-        String jksPath = applicationContext.getBean(ServiceProperty.class).get("hybrid.security.path");
+        String jksPath = applicationContext.getBean(ServiceProperty.class).get(
+                String.class,
+                "hybrid.security.path",
+                "security/hybrid.jks"
+        );
         this.url = applicationContext.getBean(ServiceProperty.class).get(
                 String.class,
                 "hybrid.url",
