@@ -2,10 +2,7 @@ package ru.jamsys;
 
 import ru.jamsys.core.App;
 import ru.jamsys.core.extension.builder.HashMapBuilder;
-import ru.jamsys.core.flat.util.Util;
-import ru.jamsys.core.flat.util.UtilFileResource;
-import ru.jamsys.core.flat.util.UtilHide;
-import ru.jamsys.core.flat.util.UtilJson;
+import ru.jamsys.core.flat.util.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -65,8 +62,8 @@ public class PrepareDataTemplate {
                 .build();
 
         try {
-            result.put("DocDate", Util.timestampToDateFormat(
-                    Util.getTimestamp(result.get("DocDate") + "", "yyyy-MM-dd"),
+            result.put("DocDate", UtilDate.timestampFormat(
+                    UtilDate.getTimestamp(result.get("DocDate") + "", "yyyy-MM-dd"),
                     "dd.MM.yyyy"
             ));
         } catch (Throwable th) {
@@ -75,7 +72,7 @@ public class PrepareDataTemplate {
 
         try {
             Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(Util.getTimestamp(result.get("PaymentDate") + "", "yyyy-MM-dd'T'HH:mm:ssXXX") * 1000);
+            cal.setTimeInMillis(UtilDate.getTimestamp(result.get("PaymentDate") + "", "yyyy-MM-dd'T'HH:mm:ssXXX") * 1000);
             String[] monthNames = {"января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"};
             String month = monthNames[cal.get(Calendar.MONTH)];
             result.put("PaymentDatePretty",
@@ -87,8 +84,8 @@ public class PrepareDataTemplate {
                             + ":" + Util.padLeft(cal.get(Calendar.SECOND)+"", 2, "0") + " мск"
             );
 
-            result.put("PaymentDate", Util.timestampToDateFormat(
-                    Util.getTimestamp(result.get("PaymentDate") + "", "yyyy-MM-dd'T'HH:mm:ssXXX"),
+            result.put("PaymentDate", UtilDate.timestampFormat(
+                    UtilDate.getTimestamp(result.get("PaymentDate") + "", "yyyy-MM-dd'T'HH:mm:ssXXX"),
                     "dd.MM.yyyy HH:mm"
             ));
         } catch (Throwable th) {
@@ -106,7 +103,7 @@ public class PrepareDataTemplate {
         result.put("SumFee", String.format("%.2f", fee.doubleValue()));
         result.put("TotalSum", String.format("%.2f", sum.add(fee).doubleValue()));
         result.put("KPP", "0");
-        result.put("Now", Util.getDate("dd.MM.yyyy HH:mm"));
+        result.put("Now", UtilDate.get("dd.MM.yyyy HH:mm"));
         result.put("PaymentOperation", mapOper.get(result.get("PayMethodCode")));
         result.put("PaymentType", mapType.get(result.get("PayMethodCode")));
 

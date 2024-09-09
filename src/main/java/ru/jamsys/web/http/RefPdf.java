@@ -1,6 +1,5 @@
 package ru.jamsys.web.http;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
 import lombok.Setter;
 import net.sf.jasperreports.engine.*;
@@ -83,8 +82,7 @@ public class RefPdf implements PromiseGenerator, HttpHandler {
                     JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, new HashMap<>(), beanColDataSource);
 
                     BufferedImage image = (BufferedImage) JasperPrintManager.printPageToImage(jasperPrint, 0, 5f);
-                    HttpServletResponse response = servletHandler.getResponse();
-                    ImageIO.write(image, "jpg", response.getOutputStream());
+                    ImageIO.write(image, "jpg", servletHandler.getResponseOutputStream());
 
 
                     promise.setRepositoryMap("paymentPrint", true);

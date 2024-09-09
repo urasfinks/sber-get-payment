@@ -8,7 +8,6 @@ import org.apache.pdfbox.rendering.ImageType;
 import org.apache.pdfbox.rendering.PDFRenderer;
 import ru.jamsys.core.flat.template.twix.TemplateTwix;
 import ru.jamsys.core.flat.util.FileWriteOptions;
-import ru.jamsys.core.flat.util.Util;
 import ru.jamsys.core.flat.util.UtilFile;
 import ru.jamsys.core.flat.util.UtilJson;
 
@@ -73,10 +72,10 @@ public class HtmlPdfGenerator {
         PdfRendererBuilder builder = new PdfRendererBuilder();
         builder.useFastMode();
 
-        builder.useFont(Util.getWebFile("ArialRegular.ttf"), "Arial");
-        builder.useFont(Util.getWebFile(("rouble.ttf")), "ALS Rubl");
+        builder.useFont(UtilFile.getWebFile("ArialRegular.ttf"), "Arial");
+        builder.useFont(UtilFile.getWebFile(("rouble.ttf")), "ALS Rubl");
 
-        String html = Util.getWebContent(path);
+        String html = UtilFile.getWebContent(path);
 
         Map<String, String> sMap = new LinkedHashMap<>();
         data.forEach((key, value) -> sMap.put(key, value.toString()));
@@ -101,8 +100,8 @@ public class HtmlPdfGenerator {
         builder.toStream(outputStream);
         PdfRendererBuilder builder2 = new PdfRendererBuilder();
 
-        builder2.useFont(Util.getWebFile("ArialRegular.ttf"), "Arial");
-        builder2.useFont(Util.getWebFile(("rouble.ttf")), "ALS Rubl");
+        builder2.useFont(UtilFile.getWebFile("ArialRegular.ttf"), "Arial");
+        builder2.useFont(UtilFile.getWebFile(("rouble.ttf")), "ALS Rubl");
 
         builder.withHtmlContent(html, "/");
         builder.run();

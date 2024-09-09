@@ -63,7 +63,7 @@ public class CheckPdf implements PromiseGenerator, HttpHandler {
                             .append("</p>")
                     );
                     parse.put("naznRender", sb.toString());
-                    servletHandler.getResponse().getOutputStream().write(HtmlPdfGenerator.convert(
+                    servletHandler.getResponseOutputStream().write(HtmlPdfGenerator.convert(
                             HtmlPdfGenerator.pdf("pdf.html", parse),
                             0
                     ));

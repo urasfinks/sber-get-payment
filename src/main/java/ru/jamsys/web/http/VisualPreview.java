@@ -10,7 +10,8 @@ import ru.jamsys.core.component.ServicePromise;
 import ru.jamsys.core.extension.builder.HashMapBuilder;
 import ru.jamsys.core.extension.http.ServletHandler;
 import ru.jamsys.core.flat.template.twix.TemplateTwix;
-import ru.jamsys.core.flat.util.Util;
+import ru.jamsys.core.flat.util.UtilDate;
+import ru.jamsys.core.flat.util.UtilFile;
 import ru.jamsys.core.promise.Promise;
 import ru.jamsys.core.promise.PromiseGenerator;
 import ru.jamsys.core.web.http.HttpHandler;
@@ -47,8 +48,8 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
                     }
 
                     if (mapEscaped.containsKey("date")) { // В QR код зашивается pretty дата
-                        promise.setRepositoryMap("date", Util.timestampToDateFormat(
-                                Util.getTimestamp(mapEscaped.get("date"), "dd.MM.yyyy"),
+                        promise.setRepositoryMap("date", UtilDate.timestampFormat(
+                                UtilDate.getTimestamp(mapEscaped.get("date"), "dd.MM.yyyy"),
                                 "yyyy-MM-dd"
                         ));
                     }
@@ -63,8 +64,8 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
         promiseSource.onComplete((_, promise) -> {
                     ServletHandler input = promise.getRepositoryMapClass(ServletHandler.class);
                     if (promise.getRepositoryMap("redirect", Boolean.class, false)) {
-                        input.getResponse().setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-                        input.getResponse().setHeader("Location", promise.getRepositoryMap("uri", String.class));
+                        input.setResponseStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+                        input.setResponseHeader("Location", promise.getRepositoryMap("uri", String.class));
                         input.getCompletableFuture().complete(null);
                     } else if (promise.getRepositoryMap("paymentPrint", Boolean.class, false)) {
                         input.getCompletableFuture().complete(null);
@@ -92,11 +93,11 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
                 ? promise.getRepositoryMap("suip", String.class, "")
                 : "";
         input.setResponseBody(TemplateTwix.template(
-                Util.getWebContent(pathHtml),
+                UtilFile.getWebContent(pathHtml),
                 new HashMapBuilder<String, String>()
                         .append("rquid", java.util.UUID.randomUUID().toString())
                         .append("suip", suip)
-                        .append("date", promise.getRepositoryMap("date", String.class, Util.getDate("yyyy-MM-dd")))
+                        .append("date", promise.getRepositoryMap("date", String.class, UtilDate.get("yyyy-MM-dd")))
                         .append("errorShow", promise.getRepositoryMap("error", String.class, "").isEmpty() ? "none" : "table-row")
                         .append("error", promise.getRepositoryMap("error", String.class, ""))
                         .append("json", promise.getRepositoryMap("json", String.class, "{}"))
