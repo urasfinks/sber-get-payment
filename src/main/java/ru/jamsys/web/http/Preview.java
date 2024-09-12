@@ -136,7 +136,7 @@ public class Preview implements PromiseGenerator, HttpHandler {
                         throw new RuntimeException("Нет ответа от сервиса");
                     }
                     System.out.println(UtilBase64.base64Encode(body, true));
-                    if (body.contains("<code>-41</code>")) {
+                    if (body.contains("<code>") && body.contains("<err>")) {
                         String x = body;
                         try {
                             x = x.substring(x.indexOf("<description>") + 13);

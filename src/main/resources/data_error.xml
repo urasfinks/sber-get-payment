@@ -1,0 +1,6 @@
+<order>
+    <err>
+        <code>-42</code>
+        <description>Ошибка валидации; #/SearchParams: 2 schema violations found</description>
+    </err>
+</order>
