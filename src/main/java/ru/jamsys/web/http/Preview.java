@@ -136,6 +136,16 @@ public class Preview implements PromiseGenerator, HttpHandler {
                         throw new RuntimeException("Нет ответа от сервиса");
                     }
                     System.out.println(UtilBase64.base64Encode(body, true));
+                    if (body.contains("<code>-41</code>")) {
+                        String x = body;
+                        try {
+                            x = x.substring(x.indexOf("<description>") + 13);
+                            x = x.substring(0, x.indexOf("</description>")).trim();
+                        } catch (Throwable th) {
+                            x = "Ошибка ответа от ШП: " + th.getMessage();
+                        }
+                        throw new RuntimeException(x);
+                    }
                     if (!body.contains("SUIP") || !body.contains("PayeeInfo")) {
                         throw new RuntimeException("Не найдено");
                     }
