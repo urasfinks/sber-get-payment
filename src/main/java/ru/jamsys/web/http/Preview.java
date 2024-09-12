@@ -96,7 +96,7 @@ public class Preview implements PromiseGenerator, HttpHandler {
                     promise.setRepositoryMap("date", mapEscaped.get("date-iso"));
                 })
                 .appendWithResource("http", HttpResource.class, (_, promise, httpResource) -> {
-                    if(!promise.getRepositoryMap("error", String.class, "").isEmpty()){
+                    if (!promise.getRepositoryMap(String.class, "error", "").isEmpty()) {
                         return;
                     }
                     HttpClientImpl client = new HttpClientImpl();
@@ -117,12 +117,12 @@ public class Preview implements PromiseGenerator, HttpHandler {
                             "  \"RqTm\": \"2023-08-24T10:22:16.216+03:00\",\n" +
                             "  \"SPName\": \"PAYMENT_PRO\",\n" +
                             "  \"SearchParams\": {\n" +
-                            "    \"DateBegin\": \"" + promise.getRepositoryMap("date", String.class) + "T00:00:00\",\n" +
-                            "    \"DateEnd\": \"" + promise.getRepositoryMap("date", String.class) + "T23:59:59\",\n" +
+                            "    \"DateBegin\": \"" + promise.getRepositoryMap(String.class, "date") + "T00:00:00\",\n" +
+                            "    \"DateEnd\": \"" + promise.getRepositoryMap(String.class, "date") + "T23:59:59\",\n" +
                             "    \"SUIPPayInfoList\": [\n" +
                             "      {\n" +
                             "        \"SUIPPayInfo\": {\n" +
-                            "          \"SUIP\": \"" + promise.getRepositoryMap("suip", String.class) + "\"\n" +
+                            "          \"SUIP\": \"" + promise.getRepositoryMap(String.class, "suip") + "\"\n" +
                             "        }\n" +
                             "      }\n" +
                             "    ]\n" +

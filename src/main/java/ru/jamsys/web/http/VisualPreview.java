@@ -63,11 +63,11 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
     public static void addHandler(Promise promiseSource, String pathHtmlSuccess, String pathHtmlError) {
         promiseSource.onComplete((_, promise) -> {
                     ServletHandler input = promise.getRepositoryMapClass(ServletHandler.class);
-                    if (promise.getRepositoryMap("redirect", Boolean.class, false)) {
+                    if (promise.getRepositoryMap(Boolean.class, "redirect", false)) {
                         input.setResponseStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-                        input.setResponseHeader("Location", promise.getRepositoryMap("uri", String.class));
+                        input.setResponseHeader("Location", promise.getRepositoryMap(String.class, "uri"));
                         input.getCompletableFuture().complete(null);
-                    } else if (promise.getRepositoryMap("paymentPrint", Boolean.class, false)) {
+                    } else if (promise.getRepositoryMap(Boolean.class, "paymentPrint", false)) {
                         input.getCompletableFuture().complete(null);
                     } else {
                         html(promise, pathHtmlSuccess);
@@ -89,18 +89,18 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
     public static void html(Promise promise, String pathHtml) {
         ServletHandler input = promise.getRepositoryMapClass(ServletHandler.class);
         input.setResponseContentType("text/html");
-        String suip = promise.getRepositoryMap("error", String.class, "").isEmpty()
-                ? promise.getRepositoryMap("suip", String.class, "")
+        String suip = promise.getRepositoryMap(String.class, "error", "").isEmpty()
+                ? promise.getRepositoryMap(String.class, "suip", "")
                 : "";
         input.setResponseBody(TemplateTwix.template(
                 UtilFile.getWebContent(pathHtml),
                 new HashMapBuilder<String, String>()
                         .append("rquid", java.util.UUID.randomUUID().toString())
                         .append("suip", suip)
-                        .append("date", promise.getRepositoryMap("date", String.class, UtilDate.get("yyyy-MM-dd")))
-                        .append("errorShow", promise.getRepositoryMap("error", String.class, "").isEmpty() ? "none" : "table-row")
-                        .append("error", promise.getRepositoryMap("error", String.class, ""))
-                        .append("json", promise.getRepositoryMap("json", String.class, "{}"))
+                        .append("date", promise.getRepositoryMap(String.class, "date", UtilDate.get("yyyy-MM-dd")))
+                        .append("errorShow", promise.getRepositoryMap(String.class, "error", "").isEmpty() ? "none" : "table-row")
+                        .append("error", promise.getRepositoryMap(String.class, "error", ""))
+                        .append("json", promise.getRepositoryMap(String.class, "json", "{}"))
         ));
         input.responseComplete();
     }
