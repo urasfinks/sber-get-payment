@@ -35,7 +35,7 @@ public class Html implements PromiseGenerator, HttpHandler {
     @Override
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
-                .then("init", (_, promise) -> {
+                .then("init", (_, _, promise) -> {
                     ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
 
                     Map<String, Object> parse = PrepareDataTemplate.parse(
@@ -62,11 +62,11 @@ public class Html implements PromiseGenerator, HttpHandler {
                             0
                     ));
                 })
-                .onComplete((_, promise) -> {
+                .onComplete((_, _, promise) -> {
                     ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
                     servletHandler.getCompletableFuture().complete(null);
                 })
-                .onError((_, promise) -> {
+                .onError((_, _, promise) -> {
                     ServletHandler input = promise.getRepositoryMapClass(ServletHandler.class);
                     App.error(promise.getException());
                     input.responseComplete();

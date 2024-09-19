@@ -35,7 +35,7 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
     @Override
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
-                .then("init", (_, promise) -> {
+                .then("init", (_, _, promise) -> {
                     ServletHandler input = promise.getRepositoryMapClass(ServletHandler.class);
                     Map<String, String> mapEscaped = input.getRequestReader().getMapEscapedHtmlSpecialChars();
                     if (mapEscaped.containsKey("suip")) {
@@ -61,7 +61,7 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
     }
 
     public static void addHandler(Promise promiseSource, String pathHtmlSuccess, String pathHtmlError) {
-        promiseSource.onComplete((_, promise) -> {
+        promiseSource.onComplete((_, _, promise) -> {
                     ServletHandler input = promise.getRepositoryMapClass(ServletHandler.class);
                     if (promise.getRepositoryMap(Boolean.class, "redirect", false)) {
                         input.setResponseStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
@@ -73,7 +73,7 @@ public class VisualPreview implements PromiseGenerator, HttpHandler {
                         html(promise, pathHtmlSuccess);
                     }
                 })
-                .onError((_, promise) -> {
+                .onError((_, _, promise) -> {
                     String message = promise.getException().getMessage();
                     if (message == null || message.isEmpty()) {
                         promise.setRepositoryMap("error", "Не предвиденная ошибка");

@@ -28,10 +28,11 @@ public class Mirror implements PromiseGenerator, HttpHandler {
     @Override
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
-                .then("init", (_, promise) -> {
+                .then("init", (_, _, promise) -> {
                     ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
                     servletHandler.setResponseBody(UtilFileResource.getAsString("data_error.xml"));
-                }).onComplete((_, promise) -> {
+                    //servletHandler.setResponseBody(UtilFileResource.getAsString("data2.json"));
+                }).onComplete((_, _, promise) -> {
                     ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
                     servletHandler.responseComplete();
                 });

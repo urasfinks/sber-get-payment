@@ -69,7 +69,7 @@ public class Preview implements PromiseGenerator, HttpHandler {
     @Override
     public Promise generate() { // {"suip":"100776404158ZNSW","date":"15.08.2024"}
         return servicePromise.get(index, 25_000L)
-                .then("init", (_, promise) -> {
+                .then("init", (_, _, promise) -> {
                     ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
                     Map<String, String> mapEscaped = servletHandler.getRequestReader().getMapEscapedHtmlSpecialChars();
 
@@ -95,7 +95,7 @@ public class Preview implements PromiseGenerator, HttpHandler {
                     }
                     promise.setRepositoryMap("date", mapEscaped.get("date-iso"));
                 })
-                .appendWithResource("http", HttpResource.class, (_, promise, httpResource) -> {
+                .appendWithResource("http", HttpResource.class, (_, _, promise, httpResource) -> {
                     if (!promise.getRepositoryMap(String.class, "error", "").isEmpty()) {
                         return;
                     }

@@ -33,7 +33,7 @@ public class CheckPage implements PromiseGenerator, HttpHandler {
     @Override
     public Promise generate() {
         return servicePromise.get(index, 7_000L)
-                .then("init", (_, promise) -> {
+                .then("init", (_, _, promise) -> {
                     ServletHandler servletHandler = promise.getRepositoryMapClass(ServletHandler.class);
                     Map<String, String> maps = servletHandler.getRequestReader().getMap();
                     if (!maps.containsKey("json")) {
