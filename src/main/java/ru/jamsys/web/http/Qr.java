@@ -10,9 +10,9 @@ import ru.jamsys.core.extension.http.ServletHandler;
 import ru.jamsys.core.flat.util.JsonEnvelope;
 import ru.jamsys.core.flat.util.Util;
 import ru.jamsys.core.flat.util.UtilJson;
+import ru.jamsys.core.handler.web.http.HttpHandler;
 import ru.jamsys.core.promise.Promise;
 import ru.jamsys.core.promise.PromiseGenerator;
-import ru.jamsys.core.web.http.HttpHandler;
 
 import java.io.InputStream;
 import java.util.Map;

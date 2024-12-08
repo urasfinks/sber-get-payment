@@ -12,6 +12,7 @@ import ru.jamsys.core.component.manager.ManagerVirtualFileSystem;
 import ru.jamsys.core.extension.http.ServletHandler;
 import ru.jamsys.core.flat.util.UtilBase64;
 import ru.jamsys.core.flat.util.UtilJson;
+import ru.jamsys.core.handler.web.http.HttpHandler;
 import ru.jamsys.core.promise.Promise;
 import ru.jamsys.core.promise.PromiseGenerator;
 import ru.jamsys.core.resource.http.HttpResource;
@@ -20,7 +21,6 @@ import ru.jamsys.core.resource.http.client.HttpResponse;
 import ru.jamsys.core.resource.virtual.file.system.File;
 import ru.jamsys.core.resource.virtual.file.system.FileLoaderFactory;
 import ru.jamsys.core.resource.virtual.file.system.view.FileViewKeyStore;
-import ru.jamsys.core.web.http.HttpHandler;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -135,7 +135,7 @@ public class Preview implements PromiseGenerator, HttpHandler {
                     if (body == null || body.isEmpty()) {
                         throw new RuntimeException("Нет ответа от сервиса");
                     }
-                    System.out.println(UtilBase64.base64Encode(body, true));
+                    System.out.println(UtilBase64.encode(body, true));
                     if (body.contains("<code>") && body.contains("<err>")) {
                         String x = body;
                         try {
